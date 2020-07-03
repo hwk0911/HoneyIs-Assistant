@@ -1,13 +1,10 @@
 package com.tistory.cafecoder.web.dto;
 
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
-import org.springframework.data.annotation.Id;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import lombok.Getter;
 import java.time.LocalDateTime;
 
+@Getter
 public class ExpenditureDto {
     private Long id;
     private String email;
