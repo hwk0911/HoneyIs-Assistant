@@ -42,4 +42,11 @@ public class Expenditure {
         this.location = location;
         this.email = email;
     }
+
+    public void update (Long price, LocalDateTime date, String history, String location) {
+        this.price = price;
+        this.date = date;
+        this.history = history;
+        this.location = location;
+    }
 }
