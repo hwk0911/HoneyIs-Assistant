@@ -28,15 +28,21 @@ public class IncomeService {
 
     @Transactional
     public void update (Long id, IncomeDto updateDto) {
-        Income income = incomeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("매출내역 조회 중 오류가 발생하였습니다. id: " + id));
+        Income income = findById(id);
 
         income.update(updateDto.getDate(), updateDto.getPrice(), updateDto.getMemo());
     }
 
     @Transactional
     public void delete (Long id) {
-        Income income = incomeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("지출내역 조회 중 오류가 발생하였습니다. id: " + id));
+        Income income = findById(id);
 
         incomeRepository.delete(income);
+    }
+
+    public Income findById(Long id) {
+        Income income = incomeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("지출내역 조회 중 오류가 발생하였습니다. id: " + id));
+
+        return income;
     }
 }
