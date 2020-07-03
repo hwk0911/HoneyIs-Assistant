@@ -40,15 +40,9 @@ public class Income extends BaseTimeEntity {
         this.email = email;
     }
 
-    public Income update (LocalDateTime modifiedDate) {
-        this.date = modifiedDate;
-
-        return this;
-    }
-
-    public Income update (Long modifiedPrice) {
-        this.price = modifiedPrice;
-
-        return this;
+    public void update (LocalDateTime date, Long price, String memo) {
+        this.date = date;
+        this.price = price;
+        this.memo = memo;
     }
 }
