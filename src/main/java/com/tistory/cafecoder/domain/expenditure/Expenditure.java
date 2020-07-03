@@ -15,9 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 public class Expenditure {
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String email;
 
     @Column
     private Long price;
@@ -32,10 +35,11 @@ public class Expenditure {
     private String location;
 
     @Builder
-    public Expenditure(Long price, LocalDateTime date, String history, String location) {
+    public Expenditure(Long price, LocalDateTime date, String history, String location, String email) {
         this.price = price;
         this.date = date;
         this.history = history;
         this.location = location;
+        this.email = email;
     }
 }

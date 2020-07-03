@@ -21,15 +21,23 @@ public class Income extends BaseTimeEntity {
     private Long id;
 
     @Column
+    private String email;
+
+    @Column
     private LocalDateTime date;
 
     @Column
     private Long price;
 
+    @Column
+    private String memo;
+
     @Builder
-    public Income (LocalDateTime date, Long price) {
+    public Income (LocalDateTime date, Long price, String memo, String email) {
         this.date = date;
         this.price = price;
+        this.memo = memo;
+        this.email = email;
     }
 
     public Income update (LocalDateTime modifiedDate) {
