@@ -2,9 +2,12 @@ package com.tistory.cafecoder.web.dto;
 
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class ExpenditureDto {
     private Long id;
     private String email;
