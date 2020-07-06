@@ -41,4 +41,9 @@ public class Income extends BaseTimeEntity {
         this.price = price;
         this.memo = memo;
     }
+
+    @Override
+    public String toString() {
+        return "[" + this.getId() + " " + this.getEmail() + " " + this.getDate() + " " + this.getPrice() + " " + this.getMemo() + "]";
+    }
 }
