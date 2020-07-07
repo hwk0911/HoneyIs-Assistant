@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -15,10 +18,31 @@ public class IncomeService {
     private final IncomeRepository incomeRepository;
 
     @Transactional(readOnly = true)
-    public List<Income> getIncomeList (String email) {
-        List<Income> incomeList = this.incomeRepository.findByEmail(email);
+    public List<Income> getMonthList (String email) {
+        LocalDate localDateStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
 
-        return incomeList;
+        int endYear = LocalDate.now().getYear() + ((LocalDate.now().getMonthValue() + 1) / 13);
+        int endMonth = (LocalDate.now().getMonthValue() + 1) % 12;
+
+        LocalDate localDateEnd = LocalDate.of(endYear, endMonth, 1);
+
+        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(localDateStart, localDateEnd);
+
+        return incomeListToMonth;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Income> getMonthList (int year, int month) {
+        LocalDate localDateStart = LocalDate.of(year, month, 1);
+
+        int endYear = year + ((LocalDate.now().getMonthValue() + 1) / 13);
+        int endMonth = (month + 1) % 12;
+
+        LocalDate localDateEnd = LocalDate.of(endYear, endMonth, 1);
+
+        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(localDateStart, localDateEnd);
+
+        return incomeListToMonth;
     }
 
     @Transactional
