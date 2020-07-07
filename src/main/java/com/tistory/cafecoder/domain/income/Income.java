@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +21,7 @@ public class Income extends BaseTimeEntity {
     private String email;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column
     private Long price;
@@ -29,14 +30,14 @@ public class Income extends BaseTimeEntity {
     private String memo;
 
     @Builder
-    public Income (LocalDateTime date, Long price, String memo, String email) {
+    public Income (LocalDate date, Long price, String memo, String email) {
         this.date = date;
         this.price = price;
         this.memo = memo;
         this.email = email;
     }
 
-    public void update (LocalDateTime date, Long price, String memo) {
+    public void update (LocalDate date, Long price, String memo) {
         this.date = date;
         this.price = price;
         this.memo = memo;
