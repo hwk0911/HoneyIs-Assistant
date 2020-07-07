@@ -4,14 +4,14 @@ import com.tistory.cafecoder.domain.income.Income;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
 public class IncomeDto {
     private Long id;
     private String email;
-    private LocalDateTime date;
+    private LocalDate date;
     private Long price;
     private String memo;
 
