@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,15 +30,8 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public List<Income> getMonthList (int year, int month) {
-        LocalDate localDateStart = LocalDate.of(year, month, 1);
-
-        int endYear = year + ((LocalDate.now().getMonthValue() + 1) / 13);
-        int endMonth = (month + 1) % 12;
-
-        LocalDate localDateEnd = LocalDate.of(endYear, endMonth, 1);
-
-        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(localDateStart, localDateEnd);
+    public List<Income> getMonthList (LocalDate start, LocalDate end) {
+        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(start, end);
 
         return incomeListToMonth;
     }
