@@ -8,29 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                {{^ users}}
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Sign In / Sign Up
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/users/signin">Sign In</a>
-                        <a class="dropdown-item" href="/users/signup">Sign Up</a>
-                    </div>
-                {{/ users}}
-                {{# users}}
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        {{company}}님 환영합니다.
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/users/stock">재고 입력</a>
-                        <a class="dropdown-item" href="/users/stockList">재고 확인</a>
-                        <a class="dropdown-item" href="/users/signout">Sign Out</a>
-                    </div>
-                {{/ users}}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Sign In / Sign Up
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/users/signin">Sign In</a>
+                    <a class="dropdown-item" href="/users/signup">Sign Up</a>
+                    <a class="dropdown-item" href="/income">income</a>
+                </div>
             </li>
         </ul>
     </div>
