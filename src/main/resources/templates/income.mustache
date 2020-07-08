@@ -1,20 +1,67 @@
 {{>layout/header}}
 
 <div class="container">
-    <input type="text" style="display:none" id="year" value="{{year}}">
-    <input type="text" style="display:none" id="month" value="{{month}}">
-    <h1>
-        <button type="button" class="btn btn-primary" id="btn-prevMonth"> < </button>
-        {{year}}년 {{month}}월 매출 목록
-        <button type="button" class="btn btn-primary" id="btn-nextMonth"> > </button>
-    </h1>
-    </br>
+    <!-- 신규 매출 입력 폼 -->
     <table class="table table-hover table-dark">
         <thead>
         <tr>
-            <th scope="col">DATE</th>
-            <th scope="col">PRICE</th>
-            <th scope="col">MEMO</th>
+            <th>신규 매출 데이터 입력</th>
+        </tr>
+        <tr>
+            <th width="25%">DATE</th>
+            <th width="25%">PRICE</th>
+            <th width="*">MEMO</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input type="date" id="date" width="100%"></td>
+            <td><input type="number" id="price" width="100%"></td>
+            <td><input type="text" id="memo" width="200%"></td>
+            <td>
+                <button type="submit" id="btn-incomeSave" class="btn btn-primary">SAVE</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 조회 기간 설정 -->
+    <table class="table table-hover table-dark">
+        <tr>
+            <th>조회 기간 설정</th>
+        </tr>
+        <tr>
+            <th>Start date</th>
+            <th> ~</th>
+            <th>End date</th>
+        </tr>
+        <tr>
+            <td><input type="date" id="startDate"></td>
+            <td> ~</td>
+            <td><input type="date" id="endDate"></td>
+            <td>
+                <button type="submit" class="btn btn-primary" id="btn-term">RUN</button>
+            </td>
+        </tr>
+    </table>
+    </br>
+
+    <!-- 조회 된 결과 출력 -->
+
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            {{#term}}
+                <th>{{start}} ~ {{end}} 기간의 매출 리스트</th>
+            {{/term}}
+            {{^term}}
+                <th>기간의 매출 리스트</th>
+            {{/term}}
+        </tr>
+        <tr>
+            <th width="25%">DATE</th>
+            <th width="25%">PRICE</th>
+            <th width="*">MEMO</th>
         </tr>
         </thead>
         <tbody>
