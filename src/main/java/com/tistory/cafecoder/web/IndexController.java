@@ -2,6 +2,7 @@ package com.tistory.cafecoder.web;
 
 import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.IncomeService;
+import com.tistory.cafecoder.web.dto.IncomeDto;
 import com.tistory.cafecoder.web.dto.TermIncomeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -45,19 +46,17 @@ public class IndexController {
         return "income";
     }
 
-    @PostMapping("/api/v1/termincome")
-    public Model getMonthList(Model model, @RequestBody TermIncomeDto termIncomeDto) {
-        model.addAttribute("start", termIncomeDto.getStart());
-        model.addAttribute("end", termIncomeDto.getEnd());
-        model.addAttribute("incomeList", this.incomeService.getMonthList(termIncomeDto.getStart(), termIncomeDto.getEnd()));
+    @PostMapping("/incomelist")
+    public String getMonthList(Model model, @RequestParam("startDate") String start, @RequestParam("endDate") String end) {
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+
+        model.addAttribute("start", startDate.toString());
+        model.addAttribute("end", endDate.toString());
+        model.addAttribute("incomeList", this.incomeService.getMonthList(startDate, endDate));
 
         System.out.println(model.toString());
 
-        return model;
-    }
-
-    @GetMapping("/incomelist")
-    public String incomeList () {
         return "incomeList";
     }
 }
