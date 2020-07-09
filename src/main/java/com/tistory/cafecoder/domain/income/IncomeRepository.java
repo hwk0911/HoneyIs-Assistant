@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
     List<Income> findByEmail(String email);
-    List<Income> findByDateBetween(LocalDate start, LocalDate end);
+    List<Income> findByDateBetweenOrderByDateAsc(LocalDate start, LocalDate end);
 }
