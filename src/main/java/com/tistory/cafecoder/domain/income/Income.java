@@ -1,18 +1,16 @@
 package com.tistory.cafecoder.domain.income;
 
-import com.tistory.cafecoder.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Income extends BaseTimeEntity {
+public class Income{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
