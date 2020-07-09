@@ -24,14 +24,14 @@ public class IncomeService {
 
         LocalDate localDateEnd = LocalDate.of(endYear, endMonth, 1);
 
-        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(localDateStart, localDateEnd);
+        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetweenOrderByDateAsc(localDateStart, localDateEnd);
 
         return incomeListToMonth;
     }
 
     @Transactional(readOnly = true)
     public List<Income> getMonthList (LocalDate start, LocalDate end) {
-        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetween(start, end);
+        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetweenOrderByDateAsc(start, end);
 
         return incomeListToMonth;
     }
