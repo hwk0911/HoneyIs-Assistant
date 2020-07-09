@@ -36,45 +36,17 @@
             <th>End date</th>
         </tr>
         <tr>
-            <td><input type="date" id="startDate"></td>
-            <td> ~</td>
-            <td><input type="date" id="endDate"></td>
-            <td>
-                <button type="submit" class="btn btn-primary" id="btn-term">RUN</button>
-            </td>
+            <form method="post" action="/api/v1/termincome">
+                <td><input type="date" name="startDate" class="form-control"></td>
+                <td> ~</td>
+                <td><input type="date" name="endDate" class="form-control"></td>
+
+                <td>
+                    <button type="submit" class="btn btn-primary">RUN</button>
+                </td>
+            </form>
         </tr>
     </table>
     </br>
-
-    <!-- 조회 된 결과 출력 -->
-
-    <table class="table table-hover table-dark">
-        <thead>
-        <tr>
-            {{#term}}
-                <th>{{start}} ~ {{end}} 기간의 매출 리스트</th>
-            {{/term}}
-            {{^term}}
-                <th>기간의 매출 리스트</th>
-            {{/term}}
-        </tr>
-        <tr>
-            <th width="25%">DATE</th>
-            <th width="25%">PRICE</th>
-            <th width="*">MEMO</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#incomeList}}
-            <tr>
-                <td>{{date}}</td>
-                <td>{{price}}</td>
-                <td>{{memo}}</td>
-            </tr>
-        {{/incomeList}}
-        </tbody>
-    </table>
-</div>
-</br>
 
 {{>layout/footer}}
