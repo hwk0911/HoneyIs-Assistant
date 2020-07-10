@@ -1,5 +1,7 @@
 package com.tistory.cafecoder.web;
 
+import com.tistory.cafecoder.config.auth.LoginUser;
+import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.IncomeService;
 import com.tistory.cafecoder.web.dto.IncomeDto;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -19,9 +22,15 @@ import java.util.List;
 public class IndexController {
 
     private final IncomeService incomeService;
+    private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model, @LoginUser SessionUser user) {
+
+        if(user != null) {
+            model.addAttribute("user", user.getEmail());
+        }
+
         return "index";
     }
 
@@ -33,15 +42,16 @@ public class IndexController {
     }
 
     @GetMapping("/income")
-    public String income(Model model) {
+    public String income(Model model, @LoginUser SessionUser user) {
         List<Income> incomeList = this.incomeService.getMonthList("null");
 
         model.addAttribute("incomeList", incomeList);
         model.addAttribute("year", incomeList.get(0).getDate().getYear());
         model.addAttribute("month", incomeList.get(0).getDate().getMonthValue());
+        model.addAttribute(("today"), LocalDate.now().toString());
 
-        for (Income income : incomeList) {
-            System.out.println(income.toString());
+        if(user != null) {
+            model.addAttribute("user", user.getEmail());
         }
 
         return "income";
