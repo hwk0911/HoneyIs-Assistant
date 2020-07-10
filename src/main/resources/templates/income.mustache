@@ -15,7 +15,7 @@
         </thead>
         <tbody>
         <tr>
-            <td><input type="date" id="date" width="100%"></td>
+            <td><input type="date" id="date" width="100%" value="{{today}}"></td>
             <td><input type="number" id="price" width="100%"></td>
             <td><input type="text" id="memo" width="200%"></td>
             <td>
@@ -39,7 +39,7 @@
             <form method="post" action="/incomelist">
                 <td><input type="date" name="startDate" class="form-control"></td>
                 <td> ~</td>
-                <td><input type="date" name="endDate" class="form-control"></td>
+                <td><input type="date" name="endDate" class="form-control" value="{{today}}"></td>
 
                 <td>
                     <button type="submit" class="btn btn-primary">RUN</button>
