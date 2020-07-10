@@ -11,12 +11,18 @@
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                    data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Sign In / Sign Up
+                    {{#user}} "{{user}}"님 환영합니다. <input type="text" id="email" value="{{user}}" style="display:none">{{/user}}
+                    {{^user}} "Login here!!" {{/user}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/users/signin">Sign In</a>
-                    <a class="dropdown-item" href="/users/signup">Sign Up</a>
-                    <a class="dropdown-item" href="/income">income</a>
+                    {{#user}}
+                        <a class="dropdown-item" href="/income">income</a>
+
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    {{/user}}
+                    {{^user}}
+                        <a class="dropdown-item" href="/oauth2/authorization/google" role="button">Google Login</a>
+                    {{/user}}
                 </div>
             </li>
         </ul>
