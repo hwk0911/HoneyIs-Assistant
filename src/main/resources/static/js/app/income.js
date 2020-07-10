@@ -8,11 +8,13 @@ var list = {
 
     incomeSave: function () {
         var data = {
-            email: 'hwk0911@gmail.com',
+            email: $('#email').val(),
             date: $('#date').val(),
             price: $('#price').val(),
             memo: $('#memo').val()
         };
+
+        alert(data.email);
 
         $.ajax({
             type: 'POST',
