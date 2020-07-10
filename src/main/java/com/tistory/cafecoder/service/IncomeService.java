@@ -15,30 +15,16 @@ import java.util.List;
 public class IncomeService {
     private final IncomeRepository incomeRepository;
 
-    @Transactional(readOnly = true)
-    public List<Income> getMonthList (String email) {
-        LocalDate localDateStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
-
-        int endYear = LocalDate.now().getYear() + ((LocalDate.now().getMonthValue() + 1) / 13);
-        int endMonth = (LocalDate.now().getMonthValue() + 1) % 12;
-
-        LocalDate localDateEnd = LocalDate.of(endYear, endMonth, 1);
-
-        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetweenOrderByDateAsc(localDateStart, localDateEnd);
-
-        return incomeListToMonth;
-    }
-
-    @Transactional(readOnly = true)
-    public List<Income> getMonthList (LocalDate start, LocalDate end) {
-        List<Income> incomeListToMonth = this.incomeRepository.findByDateBetweenOrderByDateAsc(start, end);
-
-        return incomeListToMonth;
-    }
-
     @Transactional
     public Long addIncome (IncomeDto incomeDto) {
         return incomeRepository.save(incomeDto.toEntity()).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Income> getMonthList (String email, LocalDate start, LocalDate end) {
+        List<Income> incomeListToMonth = this.incomeRepository.findByEmailAndDateBetweenOrderByDateAsc(email, start, end);
+
+        return incomeListToMonth;
     }
 
     @Transactional
