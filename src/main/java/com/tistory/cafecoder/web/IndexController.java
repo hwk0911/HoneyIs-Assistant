@@ -43,11 +43,6 @@ public class IndexController {
 
     @GetMapping("/income")
     public String income(Model model, @LoginUser SessionUser user) {
-        List<Income> incomeList = this.incomeService.getMonthList("null");
-
-        model.addAttribute("incomeList", incomeList);
-        model.addAttribute("year", incomeList.get(0).getDate().getYear());
-        model.addAttribute("month", incomeList.get(0).getDate().getMonthValue());
         model.addAttribute(("today"), LocalDate.now().toString());
 
         if(user != null) {
@@ -58,7 +53,7 @@ public class IndexController {
     }
 
     @PostMapping("/incomelist")
-    public String getMonthList(Model model, @RequestParam("startDate") String start, @RequestParam("endDate") String end) {
+    public String getMonthList(Model model, @RequestParam("email") String email, @RequestParam("startDate") String start, @RequestParam("endDate") String end) {
         LocalDate startDate;
         LocalDate endDate;
 
@@ -77,7 +72,7 @@ public class IndexController {
 
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
-        model.addAttribute("incomeList", this.incomeService.getMonthList(startDate, endDate));
+        model.addAttribute("incomeList", this.incomeService.getMonthList(email, startDate, endDate));
 
         System.out.println(model.toString());
 
