@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class IndexController {
         model.addAttribute("year", incomeList.get(0).getDate().getYear());
         model.addAttribute("month", incomeList.get(0).getDate().getMonthValue());
 
-        for(Income income : incomeList) {
+        for (Income income : incomeList) {
             System.out.println(income.toString());
         }
 
@@ -48,8 +49,21 @@ public class IndexController {
 
     @PostMapping("/incomelist")
     public String getMonthList(Model model, @RequestParam("startDate") String start, @RequestParam("endDate") String end) {
-        LocalDate startDate = LocalDate.parse(start);
-        LocalDate endDate = LocalDate.parse(end);
+        LocalDate startDate;
+        LocalDate endDate;
+
+        try {
+            endDate = LocalDate.parse(end);
+        }
+        catch (Exception e) {
+            endDate = LocalDate.now();
+        }
+        try {
+            startDate = LocalDate.parse(start);
+        }
+        catch (Exception e) {
+            startDate = LocalDate.of(endDate.getYear(), endDate.getMonthValue(), 1);
+        }
 
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
