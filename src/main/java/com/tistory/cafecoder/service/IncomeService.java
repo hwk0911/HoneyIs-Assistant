@@ -28,10 +28,14 @@ public class IncomeService {
     }
 
     @Transactional
-    public void update (Long id, IncomeDto updateDto) {
-        Income income = findById(id);
+    public Long update (IncomeDto updateDto) {
+        Income income = findById(updateDto.getId());
 
-        income.update(updateDto.getDate(), updateDto.getPrice(), updateDto.getMemo());
+        if(income != null) {
+            income.update(updateDto.getDate(), updateDto.getPrice(), updateDto.getMemo());
+        }
+
+        return income.getId();
     }
 
     @Transactional
@@ -42,7 +46,7 @@ public class IncomeService {
     }
 
     public Income findById(Long id) {
-        Income income = incomeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("지출내역 조회 중 오류가 발생하였습니다. id: " + id));
+        Income income = incomeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("조회 중 오류가 발생하였습니다. id: " + id));
 
         return income;
     }
