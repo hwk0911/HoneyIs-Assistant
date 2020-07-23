@@ -19,4 +19,9 @@ public class IncomeApiController {
     public Long saveIncome(@RequestBody IncomeDto incomeDto) {
         return this.incomeService.addIncome(incomeDto);
     }
+
+    @PostMapping("/api/v1/updateincome")
+    public Long updateIncome(@RequestBody IncomeDto updateDto) {
+        return this.incomeService.update(updateDto);
+    }
 }
