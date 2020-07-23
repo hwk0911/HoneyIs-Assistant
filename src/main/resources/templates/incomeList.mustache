@@ -1,6 +1,9 @@
 {{>layout/header}}
 
 <div class="container">
+    <!-- 수정 될 신규 폼 생성 -->
+    <div id="updateForm"></div>
+
     <!-- 조회 된 결과 출력 -->
     <table class="table table-hover table-dark">
         <tr>
@@ -8,9 +11,10 @@
         </tr>
     </table>
 
-    <table class="table table-hover table-dark">
+    <table class="table table-hover table-dark" id="incomeTable">
         <thead>
         <tr>
+            <th width="5%">ID</th>
             <th width="25%">DATE</th>
             <th width="25%">PRICE</th>
             <th width="*">MEMO</th>
@@ -18,11 +22,12 @@
         </thead>
         <tbody>
         {{#incomeList}}
-            <tr>
-                <td>{{date}}</td>
-                <td>{{price}}</td>
-                <td>{{memo}}</td>
-            </tr>
+                <tr typeof="button">
+                    <td>{{id}}</td>
+                    <td>{{date}}</td>
+                    <td>{{price}}</td>
+                    <td>{{memo}}</td>
+                </tr>
         {{/incomeList}}
         </tbody>
     </table>
