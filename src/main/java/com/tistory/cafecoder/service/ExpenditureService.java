@@ -2,11 +2,13 @@ package com.tistory.cafecoder.service;
 
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import com.tistory.cafecoder.domain.expenditure.ExpenditureRepository;
+import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.web.dto.ExpenditureDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,15 +22,19 @@ public class ExpenditureService {
     }
 
     @Transactional(readOnly = true)
-    public List<Expenditure> getExpenditureList () {
-        return expenditureRepository.findAll();
+    public List<Expenditure> getMonthList (String email, LocalDate start, LocalDate end) {
+        List<Expenditure> expenditureList = this.expenditureRepository.findByEmailAndDateBetweenOrderByDateAsc(email, start, end);
+
+        return expenditureList;
     }
 
     @Transactional
-    public void update (Long id, ExpenditureDto expenditureDto) {
-        Expenditure expenditure = findById(id);
+    public Long update (ExpenditureDto expenditureDto) {
+        Expenditure expenditure = findById(expenditureDto.getId());
 
         expenditure.update(expenditureDto.getPrice(), expenditureDto.getDate(), expenditureDto.getHistory(), expenditureDto.getLocation());
+
+        return expenditure.getId();
     }
 
     @Transactional
