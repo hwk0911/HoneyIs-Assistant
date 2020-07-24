@@ -39,10 +39,10 @@ public class IncomeService {
     }
 
     @Transactional
-    public void delete (Long id) {
+    public Long delete (Long id) {
         Income income = findById(id);
-
         incomeRepository.delete(income);
+        return id;
     }
 
     public Income findById(Long id) {
