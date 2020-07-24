@@ -1,0 +1,55 @@
+{{>layout/header}}
+
+<div class="container">
+    <!-- 신규 지출 입력 폼 -->
+    <table class="table table-hover table-dark">
+        <thead>
+        <tr>
+            <th>신규 지출 데이터 입력</th>
+        </tr>
+        <tr>
+            <th width="25%">DATE</th>
+            <th width="25%">PRICE</th>
+            <th width="*">LOCATION</th>
+            <th width="*">HISTORY</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input type="date" id="date" width="100%" value="{{today}}"></td>
+            <td><input type="number" id="price" width="100%"></td>
+            <td><input type="text" id="location" width="200%"></td>
+            <td><input type="text" id="history" width="200%"></td>
+            <td>
+                <button type="submit" id="btn-expenditureSave" class="btn btn-primary">SAVE</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 조회 기간 설정 -->
+    <table class="table table-hover table-dark">
+        <tr>
+            <th>조회 기간 설정</th>
+        </tr>
+        <tr>
+            <th>Start date</th>
+            <th> ~</th>
+            <th>End date</th>
+        </tr>
+        <tr>
+            <form method="post" action="/expenditure/list">
+                <td><input type="date" name="startDate" class="form-control"></td>
+                <td> ~</td>
+                <td><input type="date" name="endDate" class="form-control" value="{{today}}"></td>
+
+                <td>
+                    <input type="text" name="email" value="{{user}}" class="form-control" style="display:none" readonly>
+                    <button type="submit" class="btn btn-primary">RUN</button>
+                </td>
+            </form>
+        </tr>
+    </table>
+    </br>
+
+{{>layout/footer}}
