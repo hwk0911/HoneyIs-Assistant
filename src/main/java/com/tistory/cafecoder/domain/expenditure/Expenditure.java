@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class Expenditure {
     private Long price;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column
     private String history;
@@ -31,7 +31,7 @@ public class Expenditure {
     private String location;
 
     @Builder
-    public Expenditure(Long price, LocalDateTime date, String history, String location, String email) {
+    public Expenditure(Long price, LocalDate date, String history, String location, String email) {
         this.price = price;
         this.date = date;
         this.history = history;
@@ -39,7 +39,7 @@ public class Expenditure {
         this.email = email;
     }
 
-    public void update (Long price, LocalDateTime date, String history, String location) {
+    public void update (Long price, LocalDate date, String history, String location) {
         this.price = price;
         this.date = date;
         this.history = history;
