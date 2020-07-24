@@ -38,10 +38,10 @@ public class ExpenditureService {
     }
 
     @Transactional
-    public void delete (Long id) {
+    public Long delete (Long id) {
         Expenditure expenditure = findById(id);
-
         this.expenditureRepository.delete(expenditure);
+        return id;
     }
 
     public Expenditure findById (Long id) {
