@@ -16,14 +16,22 @@ public class Client {
     private Long id;
 
     @Column
-    private Long userId;
+    private String email;
 
     @Column
     private String clientName;
 
+    @Column
+    private String number;
+
+    @Column
+    private String location;
+
     @Builder
-    public Client(Long userId, String clientName) {
-        this.userId = userId;
+    public Client(String email, String clientName, String number, String location) {
+        this.email = email;
         this.clientName = clientName;
+        this.number = number;
+        this.location = location;
     }
 }
