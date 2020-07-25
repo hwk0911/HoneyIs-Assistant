@@ -1,12 +1,11 @@
 package com.tistory.cafecoder.web.dto;
 
 import com.tistory.cafecoder.domain.product.Client;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class ClientDto {
     private Long id;
     private String email;
