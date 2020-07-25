@@ -2,7 +2,6 @@ package com.tistory.cafecoder.service;
 
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import com.tistory.cafecoder.domain.expenditure.ExpenditureRepository;
-import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.web.dto.ExpenditureDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
