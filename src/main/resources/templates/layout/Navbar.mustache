@@ -7,24 +7,42 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
+            {{#user}}
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                    data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    {{#user}} "{{user}}"님 환영합니다. <input type="text" id="email" value="{{user}}" style="display:none">{{/user}}
-                    {{^user}} "Login here!!" {{/user}}
+                    "{{user}}"님 환영합니다. <input type="text" id="email" value="{{user}}" style="display:none">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {{#user}}
-                        <a class="dropdown-item" href="/income">income</a>
-                        <a class="dropdown-item" href="/expenditure">expenditure</a>
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                    {{/user}}
-                    {{^user}}
-                        <a class="dropdown-item" href="/oauth2/authorization/google" role="button">Google Login</a>
-                    {{/user}}
+                    <a class="dropdown-item" href="/client">발주처 목록</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Logout</a>
                 </div>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/income">매출 현황<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/expenditure">지출 현황<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            {{/user}}
+            {{^user}}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/oauth2/authorization/google">Google Login<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            {{/user}}
             </li>
         </ul>
+        {{#user}}
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-clientSearch">
+                    <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
+                </button>
+            </form>
+        {{/user}}
     </div>
 </nav>
