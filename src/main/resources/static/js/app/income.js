@@ -55,16 +55,21 @@ var income = {
         str += "</tr>";
 
         str += "<tr>";
-        str += "<th width='15%'>DATE</th>" + "<th width='15%'>PRICE</th>" + "<th width='*'>MEMO</th>" + "<th width='10%'>수정</th>" + "<th width='10%'>삭제</th>";
+        str += "<th width='15%'>DATE</th>" + 
+        "<th width='15%'>PRICE</th>" + 
+        "<th width='*'>MEMO</th>" + 
+        "<th width='5%'>수정</th>" + 
+        "<th width='5%'>삭제</th>";
+        
         str += "</tr>";
         str += "</thead>";
 
         str += "<tbody>";
         str += "<tr>";
         str += "<td style='display:none'>" + id + "<input type='text' style='display:none' id='updateId' value='" + id + "'>" + "</td>";
-        str += "<td><input type='date' id='updateDate' width='100%' value='" + date + "'></td>";
-        str += "<td><input type='number' id='updatePrice' width='100%' value='" + price + "'></td>";
-        str += "<td><input type='text' id='updateMemo' width='200%' value='" + memo + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='date' id='updateDate' value='" + date + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='number' id='updatePrice' value='" + price + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='text' id='updateMemo' value='" + memo + "'></td>";
         str += "<td>";
         str += "<button type='submit' id='btn-incomeUpdate' class='btn btn-primary'>UPDATE</button>";
         str += "</td>";    
@@ -109,7 +114,6 @@ var income = {
         };
 
         if (confirm("선택된 데이터: \n" + data.date + "\n" + data.price + "\n" + data.memo + "\n데이터 삭제 후 복구가 불가능합니다. 삭제하시겠습니까?")) {
-            // yes 
             $.ajax({
                 type: 'DELETE',
                 url: '/api/v1/income/delete/' + data.id,
@@ -121,9 +125,6 @@ var income = {
             }).fail(function () {
                 alert(JSON.stringify(error));
             });
-        } else {
-            // no
-            window.location.reload();
         }
     }
 };

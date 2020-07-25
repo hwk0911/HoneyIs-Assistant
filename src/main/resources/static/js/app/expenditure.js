@@ -57,17 +57,23 @@ var expenditure = {
         str += "</tr>";
 
         str += "<tr>";
-        str += "<th width='25%'>DATE</th>" + "<th width='25%'>PRICE</th>" + "<th width='25%'>LOCATION</th>" + "<th width='25%'>LOCATION</th>" + "<th width='10%'>수정</th>" + "<th width='10%'>삭제</th>";
+        str += "<th width='15%'>DATE</th>" + 
+        "<th width='15%'>PRICE</th>" + 
+        "<th width='25%%'>LOCATION</th>" + 
+        "<th width='35%'>HISTORY</th>" + 
+        "<th width='5%'>수정</th>" + 
+        "<th width='5%'>삭제</th>";
+        
         str += "</tr>";
         str += "</thead>";
 
         str += "<tbody>";
         str += "<tr>";
         str += "<td style='display:none'>" + id + "<input type='text' style='display:none' id='updateId' value='" + id + "'>" + "</td>";
-        str += "<td><input type='date' id='updateDate' width='100%' value='" + date + "'></td>";
-        str += "<td><input type='number' id='updatePrice' width='100%' value='" + price + "'></td>";
-        str += "<td><input type='text' id='updateLocation' width='200%' value='" + location + "'></td>";
-        str += "<td><input type='text' id='updateHistory' width='200%' value='" + history + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='date' id='updateDate' value='" + date + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='number' id='updatePrice' value='" + price + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='text' id='updateLocation' value='" + location + "'></td>";
+        str += "<td><input class='form-control mr-sm-2' type='text' id='updateHistory' value='" + history + "'></td>";
         str += "<td>";
         str += "<button type='submit' id='btn-expenditureUpdate' class='btn btn-primary'>UPDATE</button>";
         str += "</td>";
@@ -114,7 +120,6 @@ var expenditure = {
         };
 
         if (confirm("선택된 데이터: \n" + data.date + "\n" + data.price + "\n" + data.location + "\n" + data.history + "\n데이터 삭제 후 복구가 불가능합니다. 삭제하시겠습니까?")) {
-            // yes 
             $.ajax({
                 type: 'DELETE',
                 url: '/api/v1/expenditure/delete/' + data.id,
@@ -126,9 +131,6 @@ var expenditure = {
             }).fail(function () {
                 alert(JSON.stringify(error));
             });
-        } else {
-            // no
-            window.location.reload();
         }
     }
 };
