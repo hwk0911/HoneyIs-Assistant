@@ -19,7 +19,7 @@ public class Client {
     private String email;
 
     @Column
-    private String clientName;
+    private String name;
 
     @Column
     private String number;
@@ -30,7 +30,13 @@ public class Client {
     @Builder
     public Client(String email, String clientName, String number, String location) {
         this.email = email;
-        this.clientName = clientName;
+        this.name = clientName;
+        this.number = number;
+        this.location = location;
+    }
+
+    public void update(String name, String number, String location) {
+        this.name = name;
         this.number = number;
         this.location = location;
     }
