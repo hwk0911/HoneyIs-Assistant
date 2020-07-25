@@ -1,0 +1,58 @@
+{{>layout/header}}
+
+<div class="container">
+    <!-- 신규 클라이언트 입력 폼 -->
+    <table class="table table-hover table-dark">
+        <caption>신규 클라이언트 입력</caption>
+        <thead>
+        <tr>
+            <th width="25%">CLIENT NAME</th>
+            <th width="*">LOCATION</th>
+            <th width="25%">PH_NUMBER</th>
+            <th width="10%">SAVE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input class="form-control mr-sm-2" type="text" placeholder="Client name"></td>
+            <td><input class="form-control mr-sm-2" type="text" placeholder="Client Location"></td>
+            <td><input class="form-control mr-sm-2" type="text" placeholder="Client Ph_number"></td>
+            <td>
+                <button type="submit" id="btn-clientSave" class="btn btn-primary">SAVE</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 클라이언트 검색 폼 -->
+
+    <form class="form-inline md-form mr-auto mb-4" style="float:right;">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-clientSearch">
+            <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
+        </button>
+    </form>
+
+    <!-- 사용자에 저장 된 클라이언트 목록 -->
+
+    <table class="table table-hover table-dark" id="clientList">
+        <caption>저장 된 클라이언트 목록</caption>
+        <thead>
+        <tr>
+            <th width="25%">CLIENT NAME</th>
+            <th width="25%">LOCATION</th>
+            <th width="*">PH_NUMBER</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#clientList}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{location}}</td>
+                <td>{{number}}</td>
+            </tr>
+        {{/clientList}}
+        </tbody>
+    </table>
+
+{{>layout/footer}}
