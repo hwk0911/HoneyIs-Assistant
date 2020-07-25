@@ -3,21 +3,20 @@
 <div class="container">
     <!-- 신규 매출 입력 폼 -->
     <table class="table table-hover table-dark">
+        <caption>신규 매출 입력</caption>
         <thead>
         <tr>
-            <th>신규 매출 데이터 입력</th>
-        </tr>
-        <tr>
-            <th width="25%">DATE</th>
-            <th width="25%">PRICE</th>
+            <th width="15%">DATE</th>
+            <th width="15%">PRICE</th>
             <th width="*">MEMO</th>
+            <th width="10%"></th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td><input type="date" id="date" width="100%" value="{{today}}"></td>
-            <td><input type="number" id="price" width="100%"></td>
-            <td><input type="text" id="memo" width="200%"></td>
+            <td><input class="form-control mr-sm-2" type="date" id="date" value="{{today}}"></td>
+            <td><input class="form-control mr-sm-2" type="number" id="price"></td>
+            <td><input class="form-control mr-sm-2" type="text" id="memo"></td>
             <td>
                 <button type="submit" id="btn-incomeSave" class="btn btn-primary">SAVE</button>
             </td>
@@ -27,22 +26,21 @@
 
     <!-- 조회 기간 설정 -->
     <table class="table table-hover table-dark">
-        <tr>
-            <th>조회 기간 설정</th>
-        </tr>
+        <caption>매출 정보 조회</caption>
         <tr>
             <th>Start date</th>
             <th> ~</th>
             <th>End date</th>
+            <th width="10%"></th>
         </tr>
         <tr>
             <form method="post" action="/incomelist">
-                <td><input type="date" name="startDate" class="form-control"></td>
+                <td><input type="date" name="startDate" class="form-control mr-sm-2"></td>
                 <td> ~</td>
-                <td><input type="date" name="endDate" class="form-control" value="{{today}}"></td>
+                <td><input type="date" name="endDate" class="form-control mr-sm-2" value="{{today}}"></td>
 
                 <td>
-                    <input type="text" name="email" value="{{user}}" class="form-control" style="display:none" readonly>
+                    <input type="text" name="email" value="{{user}}" class="form-control mr-sm-2" style="display:none" readonly>
                     <button type="submit" class="btn btn-primary">RUN</button>
                 </td>
             </form>
