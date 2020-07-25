@@ -113,4 +113,14 @@ public class IndexController {
 
         return "expenditureList";
     }
+
+    @GetMapping("/client")
+    public String client(Model model, @LoginUser SessionUser user) {
+
+        if(user != null) {
+            model.addAttribute("user", user.getEmail());
+        }
+
+        return "client";
+    }
 }
