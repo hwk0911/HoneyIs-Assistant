@@ -51,10 +51,9 @@ var expenditure = {
 
         var str = "<table class='table table-hover table-dark'>";
 
+        str += "<caption>지출 수정 데이터 입력</caption>"
+
         str += "<thead>";
-        str += "<tr>";
-        str += "<th>지출 수정 데이터 입력</th>";
-        str += "</tr>";
 
         str += "<tr>";
         str += "<th width='15%'>DATE</th>" + 
