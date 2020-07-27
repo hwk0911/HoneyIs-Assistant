@@ -1,6 +1,5 @@
 package com.tistory.cafecoder.service;
 
-import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import com.tistory.cafecoder.domain.product.Client;
 import com.tistory.cafecoder.domain.product.ClientRepository;
 import com.tistory.cafecoder.web.dto.ClientDto;
@@ -28,8 +27,8 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public Client search(String searchWord) {
-        return this.clientRepository.findByName(searchWord);
+    public List<Client> search(String searchWord) {
+        return this.clientRepository.findByNameContains(searchWord);
     }
 
     @Transactional
