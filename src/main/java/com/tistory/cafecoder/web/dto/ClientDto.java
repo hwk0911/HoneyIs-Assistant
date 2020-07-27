@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 public class ClientDto {
     private Long id;
     private String email;
-    private String clientName;
+    private String name;
     private String number;
     private String location;
 
-    public ClientDto(String email, String clientName, String number, String location) {
+    public ClientDto(String email, String name, String number, String location) {
         this.email = email;
-        this.clientName = clientName;
+        this.name = name;
         this.number = number;
         this.location =location;
     }
@@ -23,7 +23,7 @@ public class ClientDto {
     public Client toEntity() {
         return new Client().builder()
                 .email(this.email)
-                .clientName(this.clientName)
+                .name(this.name)
                 .number(this.number)
                 .location(this.location)
                 .build();
