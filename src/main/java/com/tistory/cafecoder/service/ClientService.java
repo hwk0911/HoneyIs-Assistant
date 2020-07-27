@@ -37,7 +37,7 @@ public class ClientService {
         Client client = findById(clientDto.getId());
 
         if(client != null) {
-            client.update(clientDto.getClientName(), clientDto.getNumber(), clientDto.getLocation());
+            client.update(clientDto.getName(), clientDto.getNumber(), clientDto.getLocation());
         }
 
         return client.getId();
