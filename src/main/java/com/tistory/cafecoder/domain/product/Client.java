@@ -28,9 +28,9 @@ public class Client {
     private String location;
 
     @Builder
-    public Client(String email, String clientName, String number, String location) {
+    public Client(String email, String name, String number, String location) {
         this.email = email;
-        this.name = clientName;
+        this.name = name;
         this.number = number;
         this.location = location;
     }
