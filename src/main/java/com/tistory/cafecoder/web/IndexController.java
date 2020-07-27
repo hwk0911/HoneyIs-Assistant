@@ -3,6 +3,8 @@ package com.tistory.cafecoder.web;
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.domain.income.Income;
+import com.tistory.cafecoder.domain.product.Client;
+import com.tistory.cafecoder.service.ClientService;
 import com.tistory.cafecoder.service.ExpenditureService;
 import com.tistory.cafecoder.service.IncomeService;
 import com.tistory.cafecoder.web.dto.IncomeDto;
@@ -24,12 +26,12 @@ public class IndexController {
 
     private final IncomeService incomeService;
     private final ExpenditureService expenditureService;
-    private final HttpSession httpSession;
+    private final ClientService clientService;
 
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
 
-        if(user != null) {
+        if (user != null) {
             model.addAttribute("user", user.getEmail());
         }
 
@@ -40,29 +42,32 @@ public class IndexController {
     public String income(Model model, @LoginUser SessionUser user) {
         model.addAttribute(("today"), LocalDate.now().toString());
 
-        if(user != null) {
+        if (user != null) {
             model.addAttribute("user", user.getEmail());
         }
 
         return "income";
     }
 
-    @PostMapping("/incomelist")
+    @PostMapping("/income/list")
     public String incomeList(Model model, @RequestParam("email") String email, @RequestParam("startDate") String start, @RequestParam("endDate") String end, @LoginUser SessionUser user) {
         LocalDate startDate;
         LocalDate endDate;
 
         try {
             endDate = LocalDate.parse(end);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             endDate = LocalDate.now();
         }
         try {
             startDate = LocalDate.parse(start);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             startDate = LocalDate.of(endDate.getYear(), endDate.getMonthValue(), 1);
+        }
+        if(startDate.isAfter(endDate)) {
+            LocalDate temp = startDate;
+            startDate = endDate;
+            endDate = temp;
         }
 
         model.addAttribute("user", user.getEmail());
@@ -79,7 +84,7 @@ public class IndexController {
     public String expenditure(Model model, @LoginUser SessionUser user) {
         model.addAttribute(("today"), LocalDate.now().toString());
 
-        if(user != null) {
+        if (user != null) {
             model.addAttribute("user", user.getEmail());
         }
 
@@ -93,15 +98,18 @@ public class IndexController {
 
         try {
             endDate = LocalDate.parse(end);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             endDate = LocalDate.now();
         }
         try {
             startDate = LocalDate.parse(start);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             startDate = LocalDate.of(endDate.getYear(), endDate.getMonthValue(), 1);
+        }
+        if(startDate.isAfter(endDate)) {
+            LocalDate temp = startDate;
+            startDate = endDate;
+            endDate = temp;
         }
 
         model.addAttribute("user", user.getEmail());
@@ -117,8 +125,26 @@ public class IndexController {
     @GetMapping("/client")
     public String client(Model model, @LoginUser SessionUser user) {
 
-        if(user != null) {
+        if (user != null) {
             model.addAttribute("user", user.getEmail());
+            model.addAttribute("clientList", this.clientService.searchAll());
+        }
+
+        return "client";
+    }
+
+    @GetMapping("/client/search")
+    public String clientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+        if (user == null) {
+            return "redirect:/oauth2/authorization/google";
+        }
+        model.addAttribute("user", user.getEmail());
+
+        if (searchWord.equals("")) {
+            model.addAttribute("clientList", this.clientService.searchAll());
+        }
+        else {
+            model.addAttribute("clientList", this.clientService.search(searchWord));
         }
 
         return "client";
