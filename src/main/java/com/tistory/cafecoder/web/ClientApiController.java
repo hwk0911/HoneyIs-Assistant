@@ -11,17 +11,19 @@ public class ClientApiController {
 
     private final ClientService clientService;
 
-    @PostMapping("/client/save")
+    @PostMapping("/api/v1/client/save")
     public Long save(@RequestBody ClientDto clientDto) {
+        System.out.println(clientDto.getEmail() + " " + clientDto.getName() + " " + clientDto.getLocation() + " " + clientDto.getNumber());
+
         return this.clientService.create(clientDto);
     }
 
-    @PutMapping("/client/update")
+    @PutMapping("/api/v1//client/update")
     public Long update(@RequestBody ClientDto clientDto) {
         return this.clientService.update(clientDto);
     }
 
-    @DeleteMapping("/client/delete/{id}")
+    @DeleteMapping("/api/v1/client/delete/{id}")
     public Long delete(@PathVariable("id") Long id) {
         return this.clientService.delete(id);
     }
