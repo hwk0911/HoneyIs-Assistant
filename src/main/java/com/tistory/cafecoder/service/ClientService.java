@@ -22,13 +22,13 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public List<Client> searchAll() {
-        return this.clientRepository.findAll();
+    public List<Client> searchAll(String email) {
+        return this.clientRepository.findByEmail(email);
     }
 
     @Transactional(readOnly = true)
-    public List<Client> search(String searchWord) {
-        return this.clientRepository.findByNameContains(searchWord);
+    public List<Client> search(String searchWord, String email) {
+        return this.clientRepository.findByNameContainsAndEmail(searchWord, email);
     }
 
     @Transactional
