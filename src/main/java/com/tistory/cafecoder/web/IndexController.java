@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -127,7 +128,7 @@ public class IndexController {
 
         if (user != null) {
             model.addAttribute("user", user.getEmail());
-            model.addAttribute("clientList", this.clientService.searchAll());
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
         }
 
         return "client";
@@ -141,12 +142,39 @@ public class IndexController {
         model.addAttribute("user", user.getEmail());
 
         if (searchWord.equals("")) {
-            model.addAttribute("clientList", this.clientService.searchAll());
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
         }
         else {
-            model.addAttribute("clientList", this.clientService.search(searchWord));
+            model.addAttribute("clientList", this.clientService.search(searchWord, user.getEmail()));
         }
 
         return "client";
+    }
+
+    @GetMapping("/stock")
+    public String stock(Model model, @LoginUser SessionUser user) {
+        if (user != null) {
+            model.addAttribute("user", user.getEmail());
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
+        }
+
+        return "stock";
+    }
+
+    @GetMapping("/stock/client/search")
+    public String stockClientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+        if (user == null) {
+            return "redirect:/oauth2/authorization/google";
+        }
+        model.addAttribute("user", user.getEmail());
+
+        if (searchWord.equals("")) {
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
+        }
+        else {
+            model.addAttribute("clientList", this.clientService.search(searchWord, user.getEmail()));
+        }
+
+        return "stock";
     }
 }
