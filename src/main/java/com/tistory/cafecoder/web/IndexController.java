@@ -8,7 +8,6 @@ import com.tistory.cafecoder.service.ClientService;
 import com.tistory.cafecoder.service.ExpenditureService;
 import com.tistory.cafecoder.service.IncomeService;
 import com.tistory.cafecoder.web.dto.IncomeDto;
-import com.tistory.cafecoder.web.dto.TermIncomeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
