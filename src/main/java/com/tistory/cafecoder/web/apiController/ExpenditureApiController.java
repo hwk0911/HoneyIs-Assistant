@@ -1,4 +1,4 @@
-package com.tistory.cafecoder.web;
+package com.tistory.cafecoder.web.apiController;
 
 import com.tistory.cafecoder.service.ExpenditureService;
 import com.tistory.cafecoder.web.dto.ExpenditureDto;

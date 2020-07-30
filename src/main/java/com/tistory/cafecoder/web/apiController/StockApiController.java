@@ -1,4 +1,4 @@
-package com.tistory.cafecoder.web;
+package com.tistory.cafecoder.web.apiController;
 
 import com.tistory.cafecoder.service.StockService;
 import com.tistory.cafecoder.web.dto.NewestDto;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class StockApiController {
 
     private final StockService stockService;
