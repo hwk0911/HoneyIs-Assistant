@@ -1,0 +1,45 @@
+{{>layout/header}}
+
+<div class="container">
+    <!-- 신규 재고 입력 동적 생성 폼 -->
+
+    <div id="stockUpdate"></div>
+
+    <!-- 클라이언트 검색 폼 -->
+
+    <form class="form-inline md-form mr-auto mb-4" style="float:right;" method="get" action="/stock/client/search">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="searchword">
+        <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-clientSearch">
+            <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
+        </button>
+    </form>
+
+    <!-- 사용자에 저장 된 클라이언트 목록 -->
+
+    {{#productMap}}
+    <table class="table table-hover table-dark" id="stockListTable">
+        <thead>
+        <tr>
+            <th width="30%">CLIENT NAME</th>
+            <th width="30%">PRODUCT NAME</th>
+            <th width="15%">COLOR</th>
+            <th width="15%">SIZE</th>
+            <th width="10%">AMOUNT</th>
+        </tr>
+        </thead>
+    <tbody>
+
+        {{#value}}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{productName}}</td>
+            <td>{{color}}</td>
+            <td>{{size}}</td>
+            <td>{{amount}}</td>
+        </tr>
+        {{/value}}
+    {{/productMap}}
+</tbody>
+</table>
+
+{{>layout/footer}}
