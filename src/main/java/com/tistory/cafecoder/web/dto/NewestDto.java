@@ -13,11 +13,13 @@ public class NewestDto {
     private String name;
     private String color;
     private String size;
+    private Long amount;
 
-    public NewestDto(Long clientId, String name, String color, String size) {
+    public NewestDto(Long clientId, String name, String color, String size, Long amount) {
         this.clientId = clientId;
         this.name = name;
         this.color = color;
         this.size = size;
+        this.amount = amount;
     }
 }
