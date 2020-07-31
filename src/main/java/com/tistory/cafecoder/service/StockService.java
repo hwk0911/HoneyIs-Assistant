@@ -62,22 +62,22 @@ public class StockService {
 
         Map<String, List<ProductDto>> retMap = new HashMap<>();
 
-        for(ClientMapping clientMapping : clientIdList) {
+        for (ClientMapping clientMapping : clientIdList) {
             Long clientId = clientMapping.getId();
             String clientName = clientMapping.getName();
             List<Product> productList = this.productRepository.findByClientId(clientId);
 
-            for(Product product : productList) {
+            for (Product product : productList) {
                 List<ProductDto> valueList;
 
-                if(retMap.containsKey(clientName)) {
+                if (retMap.containsKey(clientName)) {
                     valueList = retMap.get(clientName);
-                }
-                else {
+                } else {
                     valueList = new ArrayList<>();
                 }
 
                 valueList.add(new ProductDto(
+                        product.getId(),
                         product.getName(),
                         this.colorRepository.findColorById(product.getColorId()).getColor(),
                         this.sizeRepository.findSizeById(product.getSizeId()).getSize(),
@@ -90,4 +90,43 @@ public class StockService {
         return retMap.entrySet();
     }
 
+    @Transactional
+    public Long stockUpdate(ProductDto updateDto) {
+        Long colorId;
+        Long sizeId;
+
+        if(this.colorRepository.findByColor(updateDto.getColor()) == null) {
+            colorId = this.colorRepository.save(new Color().builder().color(updateDto.getColor()).build()).getId();
+        }
+        else {
+            colorId = this.colorRepository.findByColor(updateDto.getColor()).getId();
+        }
+
+        if(this.sizeRepository.findBySize(updateDto.getSize()) == null) {
+            sizeId = this.sizeRepository.save(new Size().builder().size(updateDto.getSize()).build()).getId();
+        }
+        else {
+            sizeId = this.sizeRepository.findBySize(updateDto.getSize()).getId();
+        }
+
+        Product product = this.productRepository.findById(updateDto.getId()).get();
+
+        product.update(
+                updateDto.getProductName(),
+                this.colorRepository.findByColor(updateDto.getColor()).getId(),
+                this.sizeRepository.findBySize(updateDto.getSize()).getId(),
+                updateDto.getAmount()
+        );
+
+        return product.getId();
+    }
+
+    @Transactional
+    public Long stockDelete(Long id) {
+        Product product = this.productRepository.findById(id).get();
+
+        this.productRepository.delete(product);
+
+        return 1L;
+    }
 }
