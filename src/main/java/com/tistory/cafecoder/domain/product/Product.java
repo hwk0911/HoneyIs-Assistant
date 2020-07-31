@@ -42,6 +42,8 @@ public class Product extends BaseTimeEntity {
 
     public void update(String name, Long colorId, Long sizeId, Long amount) {
         this.name = name;
-        this.clientId = clientId;
+        this.colorId = colorId;
+        this.sizeId = sizeId;
+        this.amount = amount;
     }
 }
