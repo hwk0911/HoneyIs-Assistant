@@ -3,56 +3,30 @@ package com.tistory.cafecoder.web;
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.service.ClientService;
-import com.tistory.cafecoder.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
-public class StockController {
-
-    private final StockService stockService;
+public class ClientController {
     private final ClientService clientService;
 
-    @PostMapping("/stock")
-    public String stockMain(Model model, @LoginUser SessionUser user) {
-        if(user != null) {
-            model.addAttribute("user", user.getEmail());
-        }
+    @GetMapping("/client")
+    public String client(Model model, @LoginUser SessionUser user) {
 
-        return "stock";
-    }
-
-    @GetMapping("/stock")
-    public String stock(Model model, @LoginUser SessionUser user) {
         if (user != null) {
             model.addAttribute("user", user.getEmail());
             model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
         }
 
-        return "stock";
+        return "client";
     }
 
-    @GetMapping("/stock/list")
-    public String stockList(Model model, @LoginUser SessionUser user) {
-        if(user != null) {
-            model.addAttribute("user", user.getEmail());
-            model.addAttribute("productMap", this.stockService.stockList(user.getEmail()));
-        }
-        else {
-            return "index";
-        }
-
-        return "stockList";
-    }
-
-
-    @GetMapping("/stock/client/search")
-    public String stockClientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+    @GetMapping("/client/search")
+    public String clientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
         if (user == null) {
             return "redirect:/oauth2/authorization/google";
         }
@@ -65,6 +39,6 @@ public class StockController {
             model.addAttribute("clientList", this.clientService.search(searchWord, user.getEmail()));
         }
 
-        return "stock";
+        return "client";
     }
 }
