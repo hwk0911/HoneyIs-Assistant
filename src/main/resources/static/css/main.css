@@ -1,4 +1,4 @@
-.order{
+.area-order{
             display: inline-block;
             outline: 2px dashed #92b0b3 ;
             outline-offset:-10px;
@@ -9,7 +9,7 @@
             height: 100%;
             background-color: gray;
         }
-        .send{
+        .area-send{
             display: inline-block;
             outline: 2px dashed #92b0b3 ;
             outline-offset:-10px;
