@@ -1,139 +1,81 @@
 package com.tistory.cafecoder.config.xlsx;
 
-import com.tistory.cafecoder.domain.product.ColorRepository;
-import com.tistory.cafecoder.domain.product.ProductRepository;
-import com.tistory.cafecoder.domain.product.Size;
-import com.tistory.cafecoder.domain.product.SizeRepository;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
 
-@Getter
 public class XlsxAnalyzer {
-    private SizeRepository sizeRepository;
-    private ColorRepository colorRepository;
-    private ProductRepository productRepository;
 
     private List<XSSFWorkbook> workbookList;
-    private List<Integer> columnIndexList;
-    private Set<Map.Entry<String, Integer>> xlsxSet;
+    private List<Integer> columnIndex;
+    private Set<Map.Entry<String, Integer>> xlsxAnalyzeSet;
 
-    public XlsxAnalyzer(SizeRepository sizeRepository, ColorRepository colorRepository, ProductRepository productRepository) {
-        this.sizeRepository = sizeRepository;
-        this.colorRepository = colorRepository;
-        this.productRepository = productRepository;
-    }
+    public XlsxAnalyzer(List<MultipartFile> multipartFileList) {
+        this.workbookList = new ArrayList<>();
 
-    public XlsxAnalyzer setMultipartFile (List<MultipartFile> xlsxFileList) {
-        this.workbookList = this.transFile(xlsxFileList);
-        this.columnIndexList = this.setColumnIndexList();
-
-        return this;
-    }
-
-    private List<XSSFWorkbook> transFile(List<MultipartFile> xlsxFileList) {
-        List<XSSFWorkbook> workbookList = new ArrayList<>();
-
-        for(MultipartFile multipartFile : xlsxFileList) {
-            try{
+        for (MultipartFile multipartFile : multipartFileList) {
+            try {
                 workbookList.add(new XSSFWorkbook(multipartFile.getInputStream()));
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        return workbookList;
+        this.getColumns();
     }
 
-    private List<Integer> setColumnIndexList() {
-        List<Integer> orderColumns = new ArrayList<>();
+    private void getColumns() {
+        this.columnIndex = new ArrayList<>();
 
-        XSSFWorkbook workbook = this.workbookList.get(0);
-        XSSFSheet sheet = workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
+        XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
+        XSSFRow row = xssfSheet.getRow(0);
 
-        XSSFRow row = sheet.getRow(0);
-
-        int cells = row.getPhysicalNumberOfCells();
-        for(int column = 0; column <= cells ; ++column) {
-            XSSFCell cell = row.getCell(column);
-
-            if(cell == null) {
-                continue;
-            }
-            else {
-                switch (cell.toString()) {
-                    case "상품명":
-                    case "옵션 정보":
-                    case "수량":
-                        orderColumns.add(column);
-                        break;
-                    default:
-                        continue;
-                }
+        for (int index = 0, size = row.getPhysicalNumberOfCells(); index <= size; ++index) {
+            switch (row.getCell(index).toString()) {
+                case "상품명":
+                case "옵션 정보":
+                case "수량":
+                    this.columnIndex.add(index);
+                    break;
             }
         }
-
-        return orderColumns;
     }
 
-    public XlsxAnalyzer analyzer() {
-        Map<String, Integer> orderMap = new HashMap<>();
+    public Set<Map.Entry<String, Integer>> analyzer() {
+        Map<String, Integer> dataMap = new HashMap<>();
 
-        for(XSSFWorkbook workbook : this.workbookList) {
-            XSSFSheet sheet = workbook.getSheetAt(workbook.getNumberOfSheets() - 1);
+        XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
+        Integer maxRow = xssfSheet.getPhysicalNumberOfRows();
 
-            int size = sheet.getPhysicalNumberOfRows();
+        for (int index = 0; index < maxRow; ++index) {
+            XSSFRow xssfRow = xssfSheet.getRow(index);
 
-            for(int index = 0 ; index < size ; ++index) {
-                XSSFRow row = sheet.getRow(index);
+            String productName = xssfRow.getCell(this.columnIndex.get(0)).toString();
+            String[] options = xssfRow.getCell(this.columnIndex.get(1)).toString().split("/");
+            Integer amount = Integer.parseInt(xssfRow.getCell(this.columnIndex.get(2)).toString());
 
-                Long name = this.productRepository.findByName(row.getCell(columnIndexList.get(0)).toString()).getId();
-                String options = row.getCell(columnIndexList.get(1)).toString();
-                Integer amount = Integer.parseInt(row.getCell(columnIndexList.get(2)).toString());
+            for (String option : options) {
+                if (!option.toUpperCase().equals("FREE") && option.contains("1개")) {
+                    StringBuilder productData = new StringBuilder(productName + "-" + option + "-FREE");
 
-                List<Long> sizeList = new ArrayList<>();
-                List<Long> colorList = new ArrayList<>();
-
-                for(String option : options.split("/")) {
-                    option = option.toUpperCase();
-
-                    if(this.sizeRepository.findBySize(option) != null) {
-                        sizeList.add(this.sizeRepository.findBySize(option).getId());
+                    try {
+                        dataMap.put(productData.toString(), dataMap.get(productName) + amount);
                     }
-                    if(this.colorRepository.findByColor(option) != null) {
-                        colorList.add(this.colorRepository.findByColor(option).getId());
-                    }
-                }
-
-                if(sizeList.isEmpty()) {
-                    sizeList.add(this.sizeRepository.findBySize("FREE").getId());
-                }
-
-                for(Long colorId : colorList) {
-                    for(Long sizeId : sizeList) {
-                        Integer tempAmount = 0;
-
-                        if(orderMap.containsKey(name + "-" + colorId + "-" + sizeId)) {
-                            tempAmount = orderMap.get(name + "-" + colorId + "-" + sizeId);
-                        }
-
-                        orderMap.put(name + "-" + colorId + "-" + sizeId, amount + tempAmount);
+                    catch (NullPointerException e) {
+                        dataMap.put(productData.toString(), amount);
                     }
                 }
             }
         }
 
-        this.xlsxSet = orderMap.entrySet();
+        return dataMap.entrySet();
+    }
 
-        return this;
+    public Set<Map.Entry<String, Integer>> getXlsxAnalyzeSet () {
+        return this.xlsxAnalyzeSet;
     }
 }
