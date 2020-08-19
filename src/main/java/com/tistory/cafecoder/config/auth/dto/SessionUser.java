@@ -1,9 +1,12 @@
 package com.tistory.cafecoder.config.auth.dto;
 
+import com.tistory.cafecoder.domain.product.Product;
 import com.tistory.cafecoder.domain.user.User;
+import com.tistory.cafecoder.web.dto.ProductDto;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,8 +15,7 @@ public class SessionUser implements Serializable {
     private String name;
     private String email;
     private String picture;
-    private Set<Map.Entry<String, Integer>> sendList;
-    private Set<Map.Entry<String, Integer>> orderList;
+    private Set<Map.Entry<String, List<ProductDto>>> xlsxResult;
 
     public SessionUser(User user) {
         this.name = user.getName();
@@ -21,15 +23,7 @@ public class SessionUser implements Serializable {
         this.picture = user.getPicture();
     }
 
-    public SessionUser setSendList (Set<Map.Entry<String, Integer>> sendList) {
-        this.sendList = sendList;
-
-        return this;
-    }
-
-    public SessionUser setOrderList (Set<Map.Entry<String, Integer>> orderList) {
-        this.orderList = orderList;
-
-        return this;
+    public void setXlsxResult (Map<String, List<ProductDto>> xlsxResult) {
+        this.xlsxResult = xlsxResult.entrySet();
     }
 }
