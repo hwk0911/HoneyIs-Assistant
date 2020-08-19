@@ -1,5 +1,6 @@
 package com.tistory.cafecoder.config.xlsx;
 
+import com.tistory.cafecoder.config.xlsx.dto.XlsxDto;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,8 +12,7 @@ import java.util.*;
 public class XlsxAnalyzer {
 
     private List<XSSFWorkbook> workbookList;
-    private List<Integer> columnIndex;
-    private Set<Map.Entry<String, Integer>> xlsxAnalyzeSet;
+    private Map<String, Integer> columMap;
 
     public XlsxAnalyzer(List<MultipartFile> multipartFileList) {
         this.workbookList = new ArrayList<>();
@@ -29,53 +29,44 @@ public class XlsxAnalyzer {
     }
 
     private void getColumns() {
-        this.columnIndex = new ArrayList<>();
+        this.columMap = new HashMap<>();
 
         XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
         XSSFRow row = xssfSheet.getRow(0);
 
-        for (int index = 0, size = row.getPhysicalNumberOfCells(); index <= size; ++index) {
+        for (int index = 0, size = row.getPhysicalNumberOfCells(); index < size; ++index) {
             switch (row.getCell(index).toString()) {
                 case "상품명":
                 case "옵션 정보":
                 case "수량":
-                    this.columnIndex.add(index);
+                    this.columMap.put(row.getCell(index).toString(), index);
                     break;
             }
         }
     }
 
-    public Set<Map.Entry<String, Integer>> analyzer() {
-        Map<String, Integer> dataMap = new HashMap<>();
+    public List<XlsxDto> analyzer() {
+        List<XlsxDto> analyzerList = new ArrayList<>();
 
         XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
         Integer maxRow = xssfSheet.getPhysicalNumberOfRows();
 
-        for (int index = 0; index < maxRow; ++index) {
+        for (int index = 1; index < maxRow; ++index) {
             XSSFRow xssfRow = xssfSheet.getRow(index);
 
-            String productName = xssfRow.getCell(this.columnIndex.get(0)).toString();
-            String[] options = xssfRow.getCell(this.columnIndex.get(1)).toString().split("/");
-            Integer amount = Integer.parseInt(xssfRow.getCell(this.columnIndex.get(2)).toString());
+            String productName = xssfRow.getCell(this.columMap.get("상품명")).toString();
+            String[] options = xssfRow.getCell(this.columMap.get("옵션 정보")).toString().split("/");
+            Long amount = Long.parseLong(xssfRow.getCell(this.columMap.get("수량")).toString().split("\\.")[0]);
 
-            for (String option : options) {
-                if (!option.toUpperCase().equals("FREE") && option.contains("1개")) {
-                    StringBuilder productData = new StringBuilder(productName + "-" + option + "-FREE");
-
-                    try {
-                        dataMap.put(productData.toString(), dataMap.get(productName) + amount);
-                    }
-                    catch (NullPointerException e) {
-                        dataMap.put(productData.toString(), amount);
-                    }
+            for(String option : options) {
+                if(option.contains("1개") || option.toUpperCase().equals("FREE")) {
+                    continue;
+                }
+                else {
+                    analyzerList.add(new XlsxDto(productName, option, amount));
                 }
             }
         }
-
-        return dataMap.entrySet();
-    }
-
-    public Set<Map.Entry<String, Integer>> getXlsxAnalyzeSet () {
-        return this.xlsxAnalyzeSet;
+        return analyzerList;
     }
 }
