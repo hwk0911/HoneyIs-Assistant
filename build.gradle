@@ -31,8 +31,8 @@ dependencies {
     compile('com.h2database:h2')
     compile('org.springframework.boot:spring-boot-starter-mustache')
     compile('org.springframework.boot:spring-boot-starter-oauth2-client:')
-    compile('org.apache.poi:poi:4.1.2')
-    compile('org.apache.poi:poi-ooxml:4.1.2')
+    compile('org.apache.poi:poi:3.7')
+    compile('org.apache.poi:poi-ooxml:3.7')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
