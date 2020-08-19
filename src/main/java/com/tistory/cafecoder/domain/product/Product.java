@@ -28,9 +28,6 @@ public class Product extends BaseTimeEntity {
     private Long sizeId;
 
     @Column
-    private String code;
-
-    @Column
     private Long amount;
 
     @Builder
@@ -41,8 +38,6 @@ public class Product extends BaseTimeEntity {
         this.name = name;
         this.colorId = colorId;
         this.sizeId = sizeId;
-
-        this.setCode();
     }
 
     public void update(String name, Long colorId, Long sizeId, Long amount) {
@@ -50,11 +45,5 @@ public class Product extends BaseTimeEntity {
         this.colorId = colorId;
         this.sizeId = sizeId;
         this.amount = amount;
-
-        this.setCode();
-    }
-
-    private void setCode() {
-        this.code = new StringBuilder(this.id + "-" + this.colorId + "-" + this.sizeId).toString();
     }
 }
