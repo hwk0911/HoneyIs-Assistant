@@ -22,7 +22,7 @@ public class StockService {
         String[] colorArr = newestDto.getColor().split(",");
         String[] sizeArr = newestDto.getSize().split(",");
 
-        if (this.productRepository.findByName(newestDto.getName()) != null) {
+        if (!this.productRepository.findByName(newestDto.getName()).isEmpty()) {
             return -1L;
         } else {
             for (String color : colorArr) {
@@ -95,17 +95,15 @@ public class StockService {
         Long colorId;
         Long sizeId;
 
-        if(this.colorRepository.findByColor(updateDto.getColor()) == null) {
+        if (this.colorRepository.findByColor(updateDto.getColor()) == null) {
             colorId = this.colorRepository.save(new Color().builder().color(updateDto.getColor()).build()).getId();
-        }
-        else {
+        } else {
             colorId = this.colorRepository.findByColor(updateDto.getColor()).getId();
         }
 
-        if(this.sizeRepository.findBySize(updateDto.getSize()) == null) {
+        if (this.sizeRepository.findBySize(updateDto.getSize()) == null) {
             sizeId = this.sizeRepository.save(new Size().builder().size(updateDto.getSize()).build()).getId();
-        }
-        else {
+        } else {
             sizeId = this.sizeRepository.findBySize(updateDto.getSize()).getId();
         }
 
