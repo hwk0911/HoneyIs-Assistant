@@ -59,7 +59,7 @@ public class XlsxAnalyzer {
             Long amount = Long.parseLong(xssfRow.getCell(this.columMap.get("수량")).toString().split("\\.")[0]);
 
             for(String option : options) {
-                if(option.contains("1개") || option.toUpperCase().equals("FREE")) {
+                if(option.contains("1개") || option.toUpperCase().equals("FREE") || option.equals("단품")) {
                     continue;
                 }
                 else {
