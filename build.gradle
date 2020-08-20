@@ -31,6 +31,11 @@ dependencies {
     compile('com.h2database:h2')
     compile('org.springframework.boot:spring-boot-starter-mustache')
     compile('org.springframework.boot:spring-boot-starter-oauth2-client:')
+
+    compile('org.springframework.session:spring-session-jdbc:2.1.6.RELEASE')
+
+    compile('org.mariadb.jdbc:mariadb-java-client')
+
     compile('org.apache.poi:poi:3.7')
     compile('org.apache.poi:poi-ooxml:3.7')
 
