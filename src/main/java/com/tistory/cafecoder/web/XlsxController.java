@@ -15,7 +15,7 @@ public class XlsxController {
     public String orderList (Model model, @LoginUser SessionUser user, @PathVariable("method") String method) {
         model.addAttribute("loginUser", user.getEmail());
 
-        model.addAttribute("xlsxResult", user.getXlsxResult());
+        model.addAttribute("orderAnalyze", user.getXlsxResult());
 
         return "xlsxResult";
     }
