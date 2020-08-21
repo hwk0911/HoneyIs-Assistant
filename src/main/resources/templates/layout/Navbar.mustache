@@ -8,11 +8,11 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
-            {{#user}}
+            {{#loginUser}}
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                    data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    "{{user}}"님 환영합니다. <input type="text" id="email" value="{{user}}" style="display:none">
+                    "{{loginUser}}"님 환영합니다. <input type="text" id="email" value="{{loginUser}}" style="display:none">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/client">발주처 목록</a>
@@ -32,22 +32,22 @@
                     <a class="nav-link" href="/xlsx/filesup">엑셀 분석<span
                             class="sr-only">(current)</span></a>
                 </li>
-            {{/user}}
-            {{^user}}
+            {{/loginUser}}
+            {{^loginUser}}
                 <li class="nav-item active">
                     <a class="nav-link" href="/oauth2/authorization/google">Google Login<span
                             class="sr-only">(current)</span></a>
                 </li>
-            {{/user}}
+            {{/loginUser}}
             </li>
         </ul>
-        {{#user}}
+        {{#loginUser}}
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                 <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-clientSearch">
                     <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
                 </button>
             </form>
-        {{/user}}
+        {{/loginUser}}
     </div>
 </nav>
