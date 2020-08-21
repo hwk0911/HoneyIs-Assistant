@@ -25,20 +25,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
-
-    private final IncomeService incomeService;
-    private final ExpenditureService expenditureService;
-    private final ClientService clientService;
     private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
-
         if (user != null) {
             model.addAttribute("loginUser", user.getEmail());
+            log.info("{}", user.getName());
         }
-
-        log.info("{}", user.getName());
 
         return "index";
     }
