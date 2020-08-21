@@ -32,7 +32,7 @@ public class IndexController {
     public String index(Model model, @LoginUser SessionUser user) {
 
         if (user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
         }
 
         return "index";
