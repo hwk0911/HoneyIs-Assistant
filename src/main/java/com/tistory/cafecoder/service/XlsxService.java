@@ -39,6 +39,10 @@ public class XlsxService {
 
             Long productId;
 
+            if(this.sizeRepository.findBySize("FREE") == null) {
+                this.sizeRepository.save(new Size().builder().size("FREE").build());
+            }
+
             if(this.productRepository.findByNameAndColorId(product.getProductName(), colorId) == null) {
                 productId = this.productRepository.save(new Product().builder()
                         .name(product.getProductName())
