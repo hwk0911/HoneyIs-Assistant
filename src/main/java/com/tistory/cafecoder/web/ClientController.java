@@ -18,7 +18,7 @@ public class ClientController {
     public String client(Model model, @LoginUser SessionUser user) {
 
         if (user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
             model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
         }
 
@@ -30,7 +30,7 @@ public class ClientController {
         if (user == null) {
             return "redirect:/oauth2/authorization/google";
         }
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
 
         if (searchWord.equals("")) {
             model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));

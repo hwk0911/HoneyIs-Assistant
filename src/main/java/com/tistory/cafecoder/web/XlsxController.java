@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class XlsxController {
     @GetMapping("/xlsx/result/{method}")
     public String orderList (Model model, @LoginUser SessionUser user, @PathVariable("method") String method) {
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
 
         model.addAttribute("xlsxResult", user.getXlsxResult());
 
@@ -22,7 +22,7 @@ public class XlsxController {
 
     @GetMapping("/xlsx/filesup")
     public String filesUp (Model model, @LoginUser SessionUser user) {
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
 
         return "xlsx";
     }

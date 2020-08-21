@@ -21,7 +21,7 @@ public class StockController {
     @PostMapping("/stock")
     public String stockMain(Model model, @LoginUser SessionUser user) {
         if(user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
         }
 
         return "stock";
@@ -30,7 +30,7 @@ public class StockController {
     @GetMapping("/stock")
     public String stock(Model model, @LoginUser SessionUser user) {
         if (user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
             model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
         }
 
@@ -40,7 +40,7 @@ public class StockController {
     @GetMapping("/stock/list")
     public String stockList(Model model, @LoginUser SessionUser user) {
         if(user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
             model.addAttribute("productMap", this.stockService.stockList(user.getEmail()));
         }
         else {
@@ -56,7 +56,7 @@ public class StockController {
         if (user == null) {
             return "redirect:/oauth2/authorization/google";
         }
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
 
         if (searchWord.equals("")) {
             model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));

@@ -23,7 +23,7 @@ public class ExpenditureController {
         model.addAttribute(("today"), LocalDate.now().toString());
 
         if (user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
         }
 
         return "expenditure";
@@ -50,7 +50,7 @@ public class ExpenditureController {
             endDate = temp;
         }
 
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
         model.addAttribute("expenditureList", this.expenditureService.getMonthList(email, startDate, endDate));

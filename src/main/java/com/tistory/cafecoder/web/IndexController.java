@@ -9,6 +9,8 @@ import com.tistory.cafecoder.service.ExpenditureService;
 import com.tistory.cafecoder.service.IncomeService;
 import com.tistory.cafecoder.web.dto.IncomeDto;
 import lombok.RequiredArgsConstructor;
+import org.mariadb.jdbc.internal.logging.Logger;
+import org.mariadb.jdbc.internal.logging.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,6 +29,7 @@ public class IndexController {
     private final IncomeService incomeService;
     private final ExpenditureService expenditureService;
     private final ClientService clientService;
+    private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
     @GetMapping("/")
     public String index(Model model, @LoginUser SessionUser user) {
@@ -34,6 +37,8 @@ public class IndexController {
         if (user != null) {
             model.addAttribute("loginUser", user.getEmail());
         }
+
+        log.info("{}", user.getName());
 
         return "index";
     }

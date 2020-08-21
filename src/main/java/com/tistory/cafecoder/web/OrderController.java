@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OrderController {
     @GetMapping("/xlsx")
     public String xlsx(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
 
         return "order";
     }

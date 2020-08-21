@@ -23,7 +23,7 @@ public class IncomeController {
         model.addAttribute(("today"), LocalDate.now().toString());
 
         if (user != null) {
-            model.addAttribute("user", user.getEmail());
+            model.addAttribute("loginUser", user.getEmail());
         }
 
         return "income";
@@ -50,7 +50,7 @@ public class IncomeController {
             endDate = temp;
         }
 
-        model.addAttribute("user", user.getEmail());
+        model.addAttribute("loginUser", user.getEmail());
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
         model.addAttribute("incomeList", this.incomeService.getMonthList(email, startDate, endDate));
