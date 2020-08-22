@@ -105,6 +105,27 @@ public class XlsxService {
             groupResult.put(client, tempProduct);
         }
 
+        return this.sort(groupResult);
+    }
+
+    private Map<String, List<ProductDto>> sort (Map<String, List<ProductDto>> groupResult) {
+        Iterator<String> mapItr = groupResult.keySet().iterator();
+
+        while (mapItr.hasNext()) {
+            String key = mapItr.next();
+            List<ProductDto> temp = groupResult.get(key);
+
+            Collections.sort(temp, new Comparator<ProductDto>() {
+
+                @Override
+                public int compare(ProductDto o1, ProductDto o2) {
+                    return o1.getProductName().compareTo(o2.getProductName());
+                }
+            });
+
+            groupResult.put(key, temp);
+        }
+
         return groupResult;
     }
 }
