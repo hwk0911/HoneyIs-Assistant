@@ -3,9 +3,11 @@ package com.tistory.cafecoder.web.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
-public class ProductDto {
+public class ProductDto implements Serializable {
     private Long id;
     private String productName;
     private String color;
