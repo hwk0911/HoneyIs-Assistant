@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +24,12 @@ public class XlsxApiController {
     private final ProductRepository productRepository;
 
     @PostMapping("/api/v1/xlsx/analyze/{method}")
-    public Long setOrder(@RequestParam(value = "files") List<MultipartFile> multipartFiles, @PathVariable("method") String method, @LoginUser SessionUser user) {
+    public Long setOrder(@RequestParam(value = "files") List<MultipartFile> multipartFiles, @PathVariable("method") String method, @LoginUser SessionUser user, HttpServletRequest request) {
         Map<Long, Long> productMap = this.xlsxService.getResult(multipartFiles);
+        Map<String, List<ProductDto>> groupResult = this.xlsxService.groupByClient(productMap);
 
-        user.setXlsxResult(this.xlsxService.groupByClient(productMap));
+        HttpSession session = request.getSession();
+        session.setAttribute(user.getEmail(), groupResult);
 
         return 1L;
     }
