@@ -1,6 +1,8 @@
 
 package com.tistory.cafecoder.service;
 
+import com.tistory.cafecoder.config.auth.LoginUser;
+import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.config.xlsx.XlsxAnalyzer;
 import com.tistory.cafecoder.config.xlsx.dto.XlsxDto;
 import com.tistory.cafecoder.domain.product.*;
@@ -71,7 +73,7 @@ public class XlsxService {
     //todo: 1차로 주문 목록을 보여주고, 후에 웹페이지 이동을 통해 비교를 시작하도록 수정
 
     @Transactional(readOnly = true)
-    public Map<String, List<ProductDto>> groupByClient (Map<Long, Long> productMap) {
+    public Map<String, List<ProductDto>> groupByClient (Map<Long, Long> productMap, String email) {
         Map<String, List<ProductDto>> groupResult = new HashMap<>();
         List<ProductDto> tempProduct;
 
@@ -85,7 +87,12 @@ public class XlsxService {
                 client = "발주처 없음";
             }
             else {
-                client = this.clientRepository.findById(product.getClientId()).get().getName();
+                try {
+                    client = this.clientRepository.findByIdAndEmail(product.getClientId(), email).getName();
+                }
+                catch (NullPointerException e) {
+                    client = "발주처 없음";
+                }
             }
 
             if(groupResult.containsKey(client)) {
