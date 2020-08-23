@@ -2,7 +2,7 @@
 
 <div class="container">
     <!-- 분석 결과 출력 -->
-{{#orderAnalyze}}
+    {{#orderAnalyze}}
         <table class="table table-hover table-dark">
             <caption>"{{key}}" 발주처 주문 목록</caption>
             <thead>
@@ -24,8 +24,8 @@
             {{/value}}
             </tbody>
         </table>
-{{/orderAnalyze}}
-{{^orderAnalyze}}
+    {{/orderAnalyze}}
+    {{^orderAnalyze}}
         <table class="table table-hover table-dark">
             <caption>발주 목록이 없습니다.</caption>
             <thead>
@@ -37,6 +37,6 @@
             </tr>
             </thead>
         </table>
-{{/orderAnalyze}}
-
+    {{/orderAnalyze}}
+</div>
 {{>layout/footer}}
