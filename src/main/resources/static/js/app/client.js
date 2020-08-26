@@ -23,18 +23,23 @@ var client = {
             number: $('#number').val()
         };
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/client/save',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function () {
-            alert('신규 지출이 등록되었습니다.');
-            window.location.reload();
-        }).fail(function () {
-            alert(JSON.stringify(error));
-        });
+        if (!data.name) {
+            alert("CLIENT_NAME 항목이 누락되었습니다. 다시 입력해주세요.");
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/client/save',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('발주처가 등록되었습니다.');
+                window.location.reload();
+            }).fail(function () {
+                alert(JSON.stringify(error));
+            });
+        }
     },
 
     addUpdateForm: function (tr) {
@@ -54,12 +59,12 @@ var client = {
         str += "<thead>";
 
         str += "<tr>";
-        str += "<th width='20%'>NAME</th>" + 
-        "<th width='35%'>LOCATION</th>" + 
-        "<th width='35%'>NUMBER</th>" + 
-        "<th width='5%'>수정</th>" + 
-        "<th width='5%'>삭제</th>";
-        
+        str += "<th width='20%'>NAME</th>" +
+            "<th width='35%'>LOCATION</th>" +
+            "<th width='35%'>NUMBER</th>" +
+            "<th width='5%'>수정</th>" +
+            "<th width='5%'>삭제</th>";
+
         str += "</tr>";
         str += "</thead>";
 
@@ -90,18 +95,23 @@ var client = {
             number: $('#updateNumber').val()
         };
 
-        $.ajax({
-            type: 'PUT',
-            url: '/api/v1/client/update',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function () {
-            alert('지출 수정이 완료되었습니다.');
-            window.location.reload();
-        }).fail(function () {
-            alert(JSON.stringify(error));
-        });
+        if (!data.name) {
+            alert("CLIENT_NAME 항목이 누락되었습니다. 다시 입력해주세요.");
+        }
+        else {
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/client/update',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('발주처 수정이 완료되었습니다.');
+                window.location.reload();
+            }).fail(function () {
+                alert(JSON.stringify(error));
+            });
+        }
     },
 
     clientDelete: function () {

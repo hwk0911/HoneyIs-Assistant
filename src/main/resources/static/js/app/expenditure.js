@@ -24,18 +24,23 @@ var expenditure = {
             history: $('#history').val()
         };
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/expenditure/save',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function () {
-            alert('신규 지출이 등록되었습니다.');
-            window.location.href = '/expenditure';
-        }).fail(function () {
-            alert(JSON.stringify(error));
-        });
+        if (!data.price) {
+            alert("PRICE 항목이 누락되었습니다. 다시 입력해주세요.");
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/expenditure/save',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('신규 지출이 등록되었습니다.');
+                window.location.href = '/expenditure';
+            }).fail(function () {
+                alert(JSON.stringify(error));
+            });
+        }
     },
 
     addUpdateForm: function (tr) {
@@ -56,13 +61,13 @@ var expenditure = {
         str += "<thead>";
 
         str += "<tr>";
-        str += "<th width='15%'>DATE</th>" + 
-        "<th width='15%'>PRICE</th>" + 
-        "<th width='25%%'>LOCATION</th>" + 
-        "<th width='35%'>HISTORY</th>" + 
-        "<th width='5%'>수정</th>" + 
-        "<th width='5%'>삭제</th>";
-        
+        str += "<th width='15%'>DATE</th>" +
+            "<th width='15%'>PRICE</th>" +
+            "<th width='25%%'>LOCATION</th>" +
+            "<th width='35%'>HISTORY</th>" +
+            "<th width='5%'>수정</th>" +
+            "<th width='5%'>삭제</th>";
+
         str += "</tr>";
         str += "</thead>";
 
@@ -95,18 +100,24 @@ var expenditure = {
             history: $('#updateHistory').val()
         };
 
-        $.ajax({
-            type: 'PUT',
-            url: '/api/v1/expenditure/update',
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function () {
-            alert('지출 수정이 완료되었습니다.');
-            window.location.reload();
-        }).fail(function () {
-            alert(JSON.stringify(error));
-        });
+        if (!data.price) {
+            alert("PRICE 항목이 누락되었습니다. 다시 입력해주세요.");
+        }
+        else {
+
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/expenditure/update',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('지출 수정이 완료되었습니다.');
+                window.location.reload();
+            }).fail(function () {
+                alert(JSON.stringify(error));
+            });
+        }
     },
 
     expenditureDelete: function () {
