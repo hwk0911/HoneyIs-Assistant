@@ -1,0 +1,40 @@
+{{>layout/nonNavHeader}}
+
+<div class="container">
+    <!-- 클라이언트 검색 폼 -->
+
+    <form class="form-inline md-form mr-auto mb-4" style="float:right;" method="get" action="/client/radio/search">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="searchword">
+        <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-clientSearch">
+            <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
+        </button>
+    </form>
+
+    <!-- 사용자에 저장 된 클라이언트 목록 -->
+
+    <table class="table table-hover table-dark">
+        <caption>저장 된 클라이언트 목록</caption>
+        <thead>
+        <tr>
+            <th width="5%"></th>
+            <th width="5%">ID</th>
+            <th width="25%">CLIENT NAME</th>
+            <th width="25%">LOCATION</th>
+            <th width="*">PH_NUMBER</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#clientList}}
+            <tr>
+                <td><input type="radio" name="clientName" value="{{name}}"></td>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{location}}</td>
+                <td>{{number}}</td>
+            </tr>
+        {{/clientList}}
+        </tbody>
+    </table>
+    <button class="btn btn-primary" type="button" id="btn-clientSubmit">선택 완료</button>
+</div>
+{{>layout/footer}}
