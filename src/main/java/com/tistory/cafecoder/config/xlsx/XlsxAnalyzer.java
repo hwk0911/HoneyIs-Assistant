@@ -1,6 +1,11 @@
 package com.tistory.cafecoder.config.xlsx;
 
 import com.tistory.cafecoder.config.xlsx.dto.XlsxDto;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,7 +16,7 @@ import java.util.*;
 
 public class XlsxAnalyzer {
 
-    private List<XSSFWorkbook> workbookList;
+    private List<Workbook> workbookList;
     private Map<String, Integer> columMap;
 
     public XlsxAnalyzer(List<MultipartFile> multipartFileList) {
@@ -19,8 +24,8 @@ public class XlsxAnalyzer {
 
         for (MultipartFile multipartFile : multipartFileList) {
             try {
-                workbookList.add(new XSSFWorkbook(multipartFile.getInputStream()));
-            } catch (IOException e) {
+                workbookList.add(WorkbookFactory.create(multipartFile.getInputStream()));
+            } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
             }
         }
@@ -31,15 +36,18 @@ public class XlsxAnalyzer {
     private void getColumns() {
         this.columMap = new HashMap<>();
 
-        XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
-        XSSFRow row = xssfSheet.getRow(0);
+        Sheet Sheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
+        Row row = Sheet.getRow(0);
 
         for (int index = 0, size = row.getPhysicalNumberOfCells(); index < size; ++index) {
             switch (row.getCell(index).toString()) {
                 case "상품명":
-                case "옵션 정보":
                 case "수량":
                     this.columMap.put(row.getCell(index).toString(), index);
+                    break;
+                case "옵션 정보":
+                case "옵션정보":
+                    this.columMap.put("옵션 정보", index);
                     break;
             }
         }
@@ -48,15 +56,15 @@ public class XlsxAnalyzer {
     public List<XlsxDto> analyzer() {
         List<XlsxDto> analyzerList = new ArrayList<>();
 
-        XSSFSheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
+        Sheet xssfSheet = this.workbookList.get(0).getSheetAt(workbookList.get(0).getNumberOfSheets() - 1);
         Integer maxRow = xssfSheet.getPhysicalNumberOfRows();
 
         for (int index = 1; index < maxRow; ++index) {
-            XSSFRow xssfRow = xssfSheet.getRow(index);
+            Row row = xssfSheet.getRow(index);
 
-            String productName = xssfRow.getCell(this.columMap.get("상품명")).toString();
-            String[] options = xssfRow.getCell(this.columMap.get("옵션 정보")).toString().split("/");
-            Long amount = Long.parseLong(xssfRow.getCell(this.columMap.get("수량")).toString().split("\\.")[0]);
+            String productName = row.getCell(this.columMap.get("상품명")).toString();
+            String[] options = row.getCell(this.columMap.get("옵션 정보")).toString().split("/");
+            Long amount = Long.parseLong(row.getCell(this.columMap.get("수량")).toString().split("\\.")[0]);
 
             for(String option : options) {
                 if(option.contains("1개") || option.toUpperCase().equals("FREE") || option.equals("단품")) {
