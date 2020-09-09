@@ -41,4 +41,28 @@ public class ClientController {
 
         return "client";
     }
+
+    @GetMapping("/client/radio")
+    public String searchClientPopup (Model model, @LoginUser SessionUser user) {
+        if (user != null) {
+            model.addAttribute("loginUser", user.getEmail());
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
+        }
+
+        return "clientRadio";
+    }
+
+    @GetMapping("/client/radio/search")
+    public String clientRadioSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+        model.addAttribute("loginUser", user.getEmail());
+
+        if (searchWord.equals("")) {
+            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
+        }
+        else {
+            model.addAttribute("clientList", this.clientService.search(searchWord, user.getEmail()));
+        }
+
+        return "clientRadio";
+    }
 }
