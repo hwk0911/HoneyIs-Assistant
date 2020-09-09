@@ -1,5 +1,35 @@
 {{>layout/header}}
 
-hello
+<div class="container">
+    <!-- 신규 재고 입력 동적 생성 폼 -->
+    {{#undefinedCount}}
+    <div id="stockClientUpdate"></div>
+    </br>
+
+    <!-- 사용자에 저장 된 발주처 미지정 상품 목록 -->
+
+
+        <table class="table table-hover table-dark" id="undefinedTable">
+            <caption>발주처 미지정 상품 목록</caption>
+            <thead>
+            <tr>
+                <th>PRODUCT NAME</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#productMap}}
+                <tr>
+                    <td>{{.}}</td>
+                </tr>
+            {{/productMap}}
+            </tbody>
+        </table>
+    {{/undefinedCount}}
+    <!-- 재고 없음 -->
+    {{^undefinedCount}}
+        </br>
+        <h1>발주처 미등록 상품이 없습니다.</h1>
+    {{/undefinedCount}}
+</div>
 
 {{>layout/footer}}
