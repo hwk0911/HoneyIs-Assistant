@@ -127,4 +127,25 @@ public class StockService {
 
         return 1L;
     }
+
+    @Transactional(readOnly = true)
+    public HashSet<String> undefinedStock(String email) {
+        if(this.clientRepository.findByName(email) == null) {
+            return null;
+        }
+        else {
+            List<Product> undefinedStockList = this.productRepository.findByClientId(this.clientRepository.findByName(email).getId());
+            return this.setProductDto(undefinedStockList);
+        }
+    }
+
+    public HashSet<String> setProductDto(List<Product> productList) {
+        HashSet<String> undefinedSet = new HashSet<>();
+
+        for (Product product : productList) {
+            undefinedSet.add(product.getName());
+        }
+
+        return undefinedSet;
+    }
 }
