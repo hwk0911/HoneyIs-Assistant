@@ -23,12 +23,12 @@ public class ClientService {
 
     @Transactional(readOnly = true)
     public List<Client> searchAll(String email) {
-        return this.clientRepository.findByEmail(email);
+        return this.removeDefault(this.clientRepository.findByEmail(email), email);
     }
 
     @Transactional(readOnly = true)
     public List<Client> search(String searchWord, String email) {
-        return this.clientRepository.findByNameContainsAndEmail(searchWord, email);
+        return this.removeDefault(this.clientRepository.findByNameContainsAndEmail(searchWord, email), email);
     }
 
     @Transactional
@@ -55,5 +55,17 @@ public class ClientService {
         Client client = this.clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("지출내역 조회 중 오류가 발생하였습니다. id: " + id));
 
         return client;
+    }
+
+    public List<Client> removeDefault (List<Client> clientList, String email) {
+        for(int index = 0, size = clientList.size() ; index < size ; ++index) {
+            if(clientList.get(index).getName().equals(email)) {
+                clientList.remove(index);
+
+                return clientList;
+            }
+        }
+
+        return clientList;
     }
 }
