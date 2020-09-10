@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Product findByNameAndColorId(String name, Long colorId);
+    Product findByNameAndColorIdAndEmail(String name, Long colorId, String email);
     List<Product> findByName(String name);
     List<Product> findByClientId(Long clientId);
 
