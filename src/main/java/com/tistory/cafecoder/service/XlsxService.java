@@ -54,16 +54,17 @@ public class XlsxService {
                         .build()).getId();
             }
 
-            if (this.productRepository.findByNameAndColorId(product.getProductName(), colorId) == null) {
+            if (this.productRepository.findByNameAndColorIdAndEmail(product.getProductName(), colorId, email) == null) {
                 productId = this.productRepository.save(new Product().builder()
                         .name(product.getProductName())
+                        .email(email)
                         .colorId(colorId)
                         .sizeId(this.sizeRepository.findBySize("FREE").getId())
                         .clientId(this.clientRepository.findByName(email).getId())
                         .build())
                         .getId();
             } else {
-                productId = this.productRepository.findByNameAndColorId(product.getProductName(), colorId).getId();
+                productId = this.productRepository.findByNameAndColorIdAndEmail(product.getProductName(), colorId, email).getId();
             }
 
             Long amount = product.getAmount();
@@ -78,9 +79,7 @@ public class XlsxService {
         return productMap;
     }
 
-    //todo: 1차로 주문 목록을 보여주고, 후에 웹페이지 이동을 통해 비교를 시작하도록 수정
 
-    //todo: 재고로 저장되어있지 않은 항목에 대한 즉석 발주처 지정 기능 추가. (특정항목 클릭시, 발주처 선택하는 창으로 이동, 발주처가 존재하지 않으면 등록이 불가능)
 
     @Transactional(readOnly = true)
     public Map<String, List<ProductDto>> groupByClient(Map<Long, Long> productMap, String email) {
