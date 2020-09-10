@@ -8,4 +8,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Product findByNameAndColorId(String name, Long colorId);
     List<Product> findByName(String name);
     List<Product> findByClientId(Long clientId);
+
+    List<Product> findByNameAndClientId(String name, Long clientId);
 }
