@@ -19,7 +19,7 @@ public class StockService {
     private final ClientRepository clientRepository;
 
     @Transactional
-    public Long newestSave(NewestDto newestDto) {
+    public Long newestSave(NewestDto newestDto, String email) {
         String[] colorArr = newestDto.getColor().split(",");
         String[] sizeArr = newestDto.getSize().split(",");
 
@@ -47,6 +47,7 @@ public class StockService {
                     this.productRepository.save(new Product().builder()
                             .clientId(newestDto.getClientId())
                             .name(newestDto.getName())
+                            .email(email)
                             .colorId(this.colorRepository.findByColor(color).getId())
                             .sizeId(this.sizeRepository.findBySize(size).getId())
                             .build());
