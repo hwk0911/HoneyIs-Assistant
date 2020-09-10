@@ -19,6 +19,9 @@ public class Product extends BaseTimeEntity {
     private Long clientId;
 
     @Column
+    private String email;
+
+    @Column
     private String name;
 
     @Column
@@ -31,13 +34,13 @@ public class Product extends BaseTimeEntity {
     private Long amount;
 
     @Builder
-    public Product(Long clientId, String name, Long colorId, Long sizeId) {
-        this.amount = 0L;
-
+    public Product(Long clientId, String email, String name, Long colorId, Long sizeId) {
         this.clientId = clientId;
+        this.email = email;
         this.name = name;
         this.colorId = colorId;
         this.sizeId = sizeId;
+        this.amount = 0L;
     }
 
     public void update(String name, Long colorId, Long sizeId, Long amount, Long clientId) {
