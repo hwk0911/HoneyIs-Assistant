@@ -17,8 +17,8 @@ public class StockApiController {
     private final StockService stockService;
 
     @PostMapping("/api/v1/stock/newest")
-    public Long newest(@RequestBody NewestDto newestDto) {
-        return this.stockService.newestSave(newestDto);
+    public Long newest(@RequestBody NewestDto newestDto, @LoginUser SessionUser user) {
+        return this.stockService.newestSave(newestDto, user.getEmail());
     }
 
     @PutMapping("/api/v1/stock/update")
@@ -31,7 +31,7 @@ public class StockApiController {
         return this.stockService.stockDelete(id);
     }
     
-
+    //todo : 발주처 미정상품 업데이트용 Rest API 제작 + 서비스 메소드 추가
 
     @PutMapping("/api/v1/stock/client/update")
     public Long clientModify (@RequestBody UndefinedStockDto undefinedStockDto, @LoginUser SessionUser user) {
