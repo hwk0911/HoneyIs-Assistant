@@ -50,4 +50,14 @@ public class IncomeService {
 
         return income;
     }
+
+    public int getSum (List<Income> incomeList) {
+        int sum = 0;
+
+        for(Income income : incomeList) {
+            sum += income.getPrice();
+        }
+
+        return sum;
+    }
 }

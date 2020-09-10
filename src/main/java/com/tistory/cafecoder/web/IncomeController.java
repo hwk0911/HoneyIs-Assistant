@@ -2,6 +2,7 @@ package com.tistory.cafecoder.web;
 
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
+import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -53,9 +55,13 @@ public class IncomeController {
         model.addAttribute("loginUser", user.getEmail());
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
-        model.addAttribute("incomeList", this.incomeService.getMonthList(email, startDate, endDate));
 
-        System.out.println(model.toString());
+
+        List<Income> incomeList = this.incomeService.getMonthList(email, startDate, endDate);
+        model.addAttribute("incomeList", incomeList);
+        model.addAttribute("total", this.incomeService.getSum(incomeList));
+
+
 
         return "incomeList";
     }

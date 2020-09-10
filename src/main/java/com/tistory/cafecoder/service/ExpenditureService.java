@@ -2,6 +2,7 @@ package com.tistory.cafecoder.service;
 
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import com.tistory.cafecoder.domain.expenditure.ExpenditureRepository;
+import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.web.dto.ExpenditureDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,15 @@ public class ExpenditureService {
         Expenditure expenditure = this.expenditureRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("지출내역 조회 중 오류가 발생하였습니다. id: " + id));
 
         return expenditure;
+    }
+
+    public int getSum (List<Expenditure> expenditureList) {
+        int sum = 0;
+
+        for(Expenditure expenditure : expenditureList) {
+            sum += expenditure.getPrice();
+        }
+
+        return sum;
     }
 }

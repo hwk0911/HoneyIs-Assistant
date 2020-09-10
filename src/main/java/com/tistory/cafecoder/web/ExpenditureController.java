@@ -3,6 +3,7 @@ package com.tistory.cafecoder.web;
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
+import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.ExpenditureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -53,9 +55,10 @@ public class ExpenditureController {
         model.addAttribute("loginUser", user.getEmail());
         model.addAttribute("start", startDate.toString());
         model.addAttribute("end", endDate.toString());
-        model.addAttribute("expenditureList", this.expenditureService.getMonthList(email, startDate, endDate));
 
-        System.out.println(model.toString());
+        List<Expenditure> expenditureList = this.expenditureService.getMonthList(email, startDate, endDate);
+        model.addAttribute("expenditureList", expenditureList);
+        model.addAttribute("total", this.expenditureService.getSum(expenditureList));
 
         return "expenditureList";
     }
