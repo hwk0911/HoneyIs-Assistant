@@ -3,6 +3,7 @@ package com.tistory.cafecoder.service;
 import com.tistory.cafecoder.domain.product.*;
 import com.tistory.cafecoder.web.dto.NewestDto;
 import com.tistory.cafecoder.web.dto.ProductDto;
+import com.tistory.cafecoder.web.dto.UndefinedStockDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,7 +114,8 @@ public class StockService {
                 updateDto.getProductName(),
                 this.colorRepository.findByColor(updateDto.getColor()).getId(),
                 this.sizeRepository.findBySize(updateDto.getSize()).getId(),
-                updateDto.getAmount()
+                updateDto.getAmount(),
+                product.getClientId()
         );
 
         return product.getId();
@@ -147,5 +149,31 @@ public class StockService {
         }
 
         return undefinedSet;
+    }
+
+    @Transactional
+    public Long clientAllModify (UndefinedStockDto undefinedStockDto, String email) {
+        Long clientId = this.clientRepository.findByName(email).getId();
+        Long newClientId = this.clientRepository.findByName(undefinedStockDto.getClientName()).getId();
+
+        List<Product> productList = this.productRepository.findByNameAndClientId(undefinedStockDto.getProductName(), clientId);
+
+        System.out.println(clientId);
+        System.out.println(newClientId);
+        System.out.println(productList.size());
+
+        System.out.println(undefinedStockDto.getProductName());
+
+        for(Product product : productList) {
+            product.update(
+                    product.getName(),
+                    product.getColorId(),
+                    product.getSizeId(),
+                    product.getAmount(),
+                    newClientId
+            );
+        }
+
+        return productList.get(0).getId();
     }
 }
