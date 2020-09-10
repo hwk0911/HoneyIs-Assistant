@@ -7,7 +7,10 @@ var undefinedStock = {
         $(document).on('click', '#btn-undefinedStockSearchClient', function () {
             _this.undefinedStockSearchClient();
         });
-        $('#btn-clientSubmit').on('click', function () {
+        $(document).on('click', '#btn-undefinedStockUpdate', function () {
+            _this.undefinedStockUpdate();
+        });
+        $(document).on('click', '#btn-clientSubmit', function () {
             _this.getClientName();
         });
     },
@@ -46,7 +49,7 @@ var undefinedStock = {
             "</form>" +
             "</td>";
 
-        str += "<td id=productName>" + productName + "</td>";
+        str += "<td>" + "<input type='text' class='form-control mr-sm-2' id='productName' value='" + productName + "' readonly>" + "</td>";
         str += "<td>";
         str += "<button type='submit' id='btn-undefinedStockUpdate' class='btn btn-primary'>SAVE</button>";
         str += "</td>";
@@ -71,55 +74,35 @@ var undefinedStock = {
         );
     },
 
-    addUpdateForm: function (tr) {
-        alert("다음 데이터의 수정을 진행합니다." + tr.text());
-
-        var td = tr.children();
-
-        var id = td.eq(0).text();
-        var name = td.eq(1).text();
-        var location = td.eq(2).text();
-        var number = td.eq(3).text();
-
-        var str = "<table class='table table-hover table-dark'>";
-
-        str += "<caption>발주처 수정 데이터 입력</caption>"
-
-        str += "<thead>";
-
-        str += "<tr>";
-        str += "<th width='20%'>NAME</th>" +
-            "<th width='35%'>LOCATION</th>" +
-            "<th width='35%'>NUMBER</th>" +
-            "<th width='5%'>수정</th>" +
-            "<th width='5%'>삭제</th>";
-
-        str += "</tr>";
-        str += "</thead>";
-
-        str += "<tbody>";
-        str += "<tr>";
-        str += "<td style='display:none'>" + id + "<input type='text' style='display:none' id='updateId' value='" + id + "'>" + "</td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='updateName' value='" + name + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='updateLocation' value='" + location + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='updateNumber' value='" + number + "'></td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-clientUpdate' class='btn btn-primary'>UPDATE</button>";
-        str += "</td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-clientDelete' class='btn btn-warning'>DELETE</button>";
-        str += "</td>";
-        str += "</tr>";
-        str += "</tbody>";
-        str += "</table>";
-
-        $('#updateForm').html(str);
-    },
-
     getClientName: function () {
         var name = $('input[name="clientName"]:checked').val();
         opener.document.getElementById("clientName").value = name;
         self.close();
+    },
+
+    undefinedStockUpdate: function () {
+        var data = {
+            productName: $('#productName').val(),
+            clientName: $('#clientName').val()
+        }
+
+        if (!data.clientName) {
+            alert("CLIENT_NAME 항목이 누락되었습니다. 다시 입력해주세요.");
+        }
+        else {
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/stock/client/update',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('발주처 등록이 완료되었습니다.');
+                window.location.reload();
+            }).fail(function () {
+                alert(JSON.stringify(error));
+            });
+        }
     }
 };
 
