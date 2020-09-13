@@ -1,6 +1,5 @@
 package com.tistory.cafecoder.config.auth.dto;
 
-import com.tistory.cafecoder.domain.product.Product;
 import com.tistory.cafecoder.domain.user.User;
 import com.tistory.cafecoder.web.dto.ProductDto;
 import lombok.Getter;
@@ -15,15 +14,10 @@ public class SessionUser implements Serializable {
     private String name;
     private String email;
     private String picture;
-    private Set<Map.Entry<String, List<ProductDto>>> xlsxResult;
 
     public SessionUser(User user) {
         this.name = user.getName();
         this.email = user.getEmail();
         this.picture = user.getPicture();
-    }
-
-    public void setXlsxResult (Map<String, List<ProductDto>> xlsxResult) {
-        this.xlsxResult = xlsxResult.entrySet();
     }
 }
