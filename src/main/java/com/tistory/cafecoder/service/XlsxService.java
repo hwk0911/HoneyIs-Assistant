@@ -1,12 +1,11 @@
 
 package com.tistory.cafecoder.service;
 
-import com.tistory.cafecoder.config.auth.LoginUser;
-import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.config.xlsx.XlsxAnalyzer;
 import com.tistory.cafecoder.config.xlsx.dto.XlsxDto;
 import com.tistory.cafecoder.domain.product.*;
-import com.tistory.cafecoder.domain.user.User;
+import com.tistory.cafecoder.web.dto.AmountDto;
+import com.tistory.cafecoder.web.dto.OrderDto;
 import com.tistory.cafecoder.web.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,22 +23,26 @@ public class XlsxService {
     private final ClientRepository clientRepository;
 
     @Transactional(readOnly = true)
-    public Map<Long, Long> getResult(List<MultipartFile> multipartFiles, String email) {
-        Map<Long, Long> productMap = new HashMap<>();
+    public Map<Long, AmountDto> getResult(List<MultipartFile> multipartFiles, String email) {
+        Map<Long, AmountDto> productMap = new HashMap<>();
 
         XlsxAnalyzer xlsxAnalyzer = new XlsxAnalyzer(multipartFiles);
         List<XlsxDto> analyzeList = xlsxAnalyzer.analyzer();
 
-        for (XlsxDto product : analyzeList) {
+        AmountDto amountDto;
+
+        for (XlsxDto orderProduct : analyzeList) {
             Long colorId;
 
-            if (this.colorRepository.findByColor(product.getColor()) == null) {
-                colorId = this.colorRepository.save(new Color().builder().color(product.getColor()).build()).getId();
+            if (this.colorRepository.findByColor(orderProduct.getColor()) == null) {
+                colorId = this.colorRepository.save(new Color().builder().color(orderProduct.getColor()).build()).getId();
             } else {
-                colorId = this.colorRepository.findByColor(product.getColor()).getId();
+                colorId = this.colorRepository.findByColor(orderProduct.getColor()).getId();
             }
 
             Long productId;
+            Long orderAmount;
+            Long stockAmount = 0L;
 
             if (this.sizeRepository.findBySize("FREE") == null) {
                 this.sizeRepository.save(new Size().builder().size("FREE").build());
@@ -54,37 +57,55 @@ public class XlsxService {
                         .build()).getId();
             }
 
-            if (this.productRepository.findByNameAndColorIdAndEmail(product.getProductName(), colorId, email) == null) {
-                productId = this.productRepository.save(new Product().builder()
-                        .name(product.getProductName())
-                        .email(email)
-                        .colorId(colorId)
-                        .sizeId(this.sizeRepository.findBySize("FREE").getId())
-                        .clientId(this.clientRepository.findByName(email).getId())
-                        .build())
-                        .getId();
-            } else {
-                productId = this.productRepository.findByNameAndColorIdAndEmail(product.getProductName(), colorId, email).getId();
-            }
+            if (this.productRepository.findByNameAndColorIdAndEmail(orderProduct.getProductName(), colorId, email) == null) {
+                if (!this.productRepository.findByNameAndEmail(orderProduct.getProductName(), email).isEmpty()) {
+                    Product sameProduct = this.productRepository.findByNameAndEmail(orderProduct.getProductName(), email).get(0);
 
-            Long amount = product.getAmount();
+                    productId = this.productRepository.save(new Product().builder()
+                            .name(orderProduct.getProductName())
+                            .email(email)
+                            .colorId(colorId)
+                            .sizeId(this.sizeRepository.findBySize("FREE").getId())
+                            .clientId(sameProduct.getClientId())
+                            .build())
+                            .getId();
+                } else {
+                    productId = this.productRepository.save(new Product().builder()
+                            .name(orderProduct.getProductName())
+                            .email(email)
+                            .colorId(colorId)
+                            .sizeId(this.sizeRepository.findBySize("FREE").getId())
+                            .clientId(this.clientRepository.findByName(email).getId())
+                            .build())
+                            .getId();
+                }
+            } else {
+                Product stock = this.productRepository.findByNameAndColorIdAndEmail(orderProduct.getProductName(), colorId, email);
+
+                productId = stock.getId();
+                stockAmount = stock.getAmount();
+            }
 
             if (productMap.containsKey(productId)) {
-                amount += productMap.get(productId);
+                amountDto = productMap.get(productId);
+            }
+            else {
+                amountDto = new AmountDto(0L, stockAmount);
             }
 
-            productMap.put(productId, amount);
+            amountDto.addOrderAmount(orderProduct.getAmount());
+
+            productMap.put(productId, amountDto);
         }
 
         return productMap;
     }
 
 
-
     @Transactional(readOnly = true)
-    public Map<String, List<ProductDto>> groupByClient(Map<Long, Long> productMap, String email) {
-        Map<String, List<ProductDto>> groupResult = new HashMap<>();
-        List<ProductDto> tempProduct;
+    public Map<String, List<OrderDto>> groupByClient(Map<Long, AmountDto> productMap, String email) {
+        Map<String, List<OrderDto>> groupResult = new HashMap<>();
+        List<OrderDto> tempProduct;
 
         Iterator<Long> productIterator = productMap.keySet().iterator();
 
@@ -108,11 +129,12 @@ public class XlsxService {
                 tempProduct = new ArrayList<>();
             }
 
-            ProductDto productDto = new ProductDto(product.getId(),
+            OrderDto productDto = new OrderDto(product.getId(),
                     product.getName(),
                     this.colorRepository.findById(product.getColorId()).get().getColor(),
                     this.sizeRepository.findById(product.getSizeId()).get().getSize(),
-                    productMap.get(product.getId()));
+                    productMap.get(product.getId()).getOrderAmount(),
+                    productMap.get(product.getId()).getStockAmount());
 
             tempProduct.add(productDto);
             groupResult.put(client, tempProduct);
@@ -121,17 +143,17 @@ public class XlsxService {
         return this.sort(groupResult);
     }
 
-    private Map<String, List<ProductDto>> sort(Map<String, List<ProductDto>> groupResult) {
+    private Map<String, List<OrderDto>> sort(Map<String, List<OrderDto>> groupResult) {
         Iterator<String> mapItr = groupResult.keySet().iterator();
 
         while (mapItr.hasNext()) {
             String key = mapItr.next();
-            List<ProductDto> temp = groupResult.get(key);
+            List<OrderDto> temp = groupResult.get(key);
 
-            Collections.sort(temp, new Comparator<ProductDto>() {
+            Collections.sort(temp, new Comparator<OrderDto>() {
 
                 @Override
-                public int compare(ProductDto o1, ProductDto o2) {
+                public int compare(OrderDto o1, OrderDto o2) {
                     return o1.getProductName().compareTo(o2.getProductName());
                 }
             });
