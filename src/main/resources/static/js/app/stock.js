@@ -178,7 +178,7 @@ var stock = {
         var amount = td.eq(4).text();
         var productId = td.eq(5).text();
 
-        if (clientName !== "CLIENT") {
+        if (productName !== "COLOR") {
             alert("[" + productName + "]" + " 제품의 데이터를 수정합니다.");
 
             var str = "<table class='table table-hover table-dark'>";
