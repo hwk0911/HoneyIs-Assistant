@@ -126,7 +126,35 @@ var income = {
                 type: 'DELETE',
                 url: '/api/v1/income/delete/' + data.id,
                 dataType: 'json',
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function () {
+                    var width = 0;
+                    var height = 0;
+                    var left = 0;
+                    var top = 0;
+
+                    width = 50;
+                    height = 50;
+
+                    top = ($(window).height() - height) / 2 + $(window).scrollTop();
+                    left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+                    if ($("#loading").length != 0) {
+                        $("#loading").css({
+                            "top": top + "px",
+                            "left": left + "px"
+                        });
+                        $("#loading").show();
+                    }
+                    else {
+                        $('body').append('<div id="loading" style="position:absolute; top:' + 
+                        top + 'px; left:' + 
+                        left + 'px; width:' + 
+                        width + 'px; height:' + 
+                        height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
+                    }
+
+                }
             }).done(function () {
                 alert('삭제 완료되었습니다.');
                 window.location.reload();

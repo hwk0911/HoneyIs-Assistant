@@ -20,47 +20,49 @@ var undefinedStock = {
 
         var productName = td.eq(0).text();
 
-        alert("[" + productName + "]" + " 제품의 발주처를 추가합니다.");
+        if (productName !== "PRODUCT NAME") {
+            alert("[" + productName + "]" + " 제품의 발주처를 추가합니다.");
 
-        var str = "<table class='table table-hover table-dark'>";
+            var str = "<table class='table table-hover table-dark'>";
 
-        str += "<caption>재고 수정 데이터 입력</caption>"
+            str += "<caption>재고 수정 데이터 입력</caption>"
 
-        str += "<thead>";
+            str += "<thead>";
 
-        str += "<tr>";
-        str +=
-            "<th width='*'>CLIENT NAME</th>" +
-            "<th width='55%'>PRODUCT NAME</th>" +
-            "<th width='5%'>SAVE</th>" +
-            "<th width='5%'>DELETE</th>";
+            str += "<tr>";
+            str +=
+                "<th width='*'>CLIENT NAME</th>" +
+                "<th width='55%'>PRODUCT NAME</th>" +
+                "<th width='5%'>SAVE</th>" +
+                "<th width='5%'>DELETE</th>";
 
-        str += "</tr>";
-        str += "</thead>";
+            str += "</tr>";
+            str += "</thead>";
 
-        str += "<tbody>";
-        str += "<tr>";
-        str += "<td>" +
-            "<form class='form-inline md-form mr-auto mb-4'>" +
-            "<input class='form-control mr-sm-2' type='text' placeholder='검색을 통해 입력' aria-label='Search' id='clientName' readonly>" +
-            "<button class='btn aqua-gradient btn-rounded btn-sm my-0' type='button' id='btn-undefinedStockSearchClient'>" +
-            "<img src='/images/search.png'/>" +
-            "</button>" +
-            "</form>" +
-            "</td>";
+            str += "<tbody>";
+            str += "<tr>";
+            str += "<td>" +
+                "<form class='form-inline md-form mr-auto mb-4'>" +
+                "<input class='form-control mr-sm-2' type='text' placeholder='검색을 통해 입력' aria-label='Search' id='clientName' readonly>" +
+                "<button class='btn aqua-gradient btn-rounded btn-sm my-0' type='button' id='btn-undefinedStockSearchClient'>" +
+                "<img src='/images/search.png'/>" +
+                "</button>" +
+                "</form>" +
+                "</td>";
 
-        str += "<td>" + "<input type='text' class='form-control mr-sm-2' id='productName' value='" + productName + "' readonly>" + "</td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-undefinedStockUpdate' class='btn btn-primary'>SAVE</button>";
-        str += "</td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-undefinedStockDelete' class='btn btn-warning'>DELETE</button>";
-        str += "</td>";
-        str += "</tr>";
-        str += "</tbody>";
-        str += "</table>";
+            str += "<td>" + "<input type='text' class='form-control mr-sm-2' id='productName' value='" + productName + "' readonly>" + "</td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-undefinedStockUpdate' class='btn btn-primary'>SAVE</button>";
+            str += "</td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-undefinedStockDelete' class='btn btn-warning'>DELETE</button>";
+            str += "</td>";
+            str += "</tr>";
+            str += "</tbody>";
+            str += "</table>";
 
-        $('#stockClientUpdate').html(str);
+            $('#stockClientUpdate').html(str);
+        }
     },
 
     undefinedStockSearchClient: function () {
@@ -95,7 +97,35 @@ var undefinedStock = {
                 url: '/api/v1/stock/client/update',
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                beforeSend: function () {
+                    var width = 0;
+                    var height = 0;
+                    var left = 0;
+                    var top = 0;
+
+                    width = 50;
+                    height = 50;
+
+                    top = ($(window).height() - height) / 2 + $(window).scrollTop();
+                    left = ($(window).width() - width) / 2 + $(window).scrollLeft();
+
+                    if ($("#loading").length != 0) {
+                        $("#loading").css({
+                            "top": top + "px",
+                            "left": left + "px"
+                        });
+                        $("#loading").show();
+                    }
+                    else {
+                        $('body').append('<div id="loading" style="position:absolute; top:' + 
+                        top + 'px; left:' + 
+                        left + 'px; width:' + 
+                        width + 'px; height:' + 
+                        height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
+                    }
+
+                }
             }).done(function () {
                 alert('발주처 등록이 완료되었습니다.');
                 window.location.reload();
