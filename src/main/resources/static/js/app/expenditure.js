@@ -44,8 +44,6 @@ var expenditure = {
     },
 
     addUpdateForm: function (tr) {
-        alert("다음 데이터의 수정을 진행합니다." + tr.text());
-
         var td = tr.children();
 
         var id = td.eq(0).text();
@@ -54,41 +52,45 @@ var expenditure = {
         var location = td.eq(3).text();
         var history = td.eq(4).text();
 
-        var str = "<table class='table table-hover table-dark'>";
+        if (id !== "ID") {
+            alert("다음 데이터의 수정을 진행합니다." + tr.text());
 
-        str += "<caption>지출 수정 데이터 입력</caption>"
+            var str = "<table class='table table-hover table-dark'>";
 
-        str += "<thead>";
+            str += "<caption>지출 수정 데이터 입력</caption>"
 
-        str += "<tr>";
-        str += "<th width='15%'>DATE</th>" +
-            "<th width='15%'>PRICE</th>" +
-            "<th width='25%%'>LOCATION</th>" +
-            "<th width='35%'>HISTORY</th>" +
-            "<th width='5%'>수정</th>" +
-            "<th width='5%'>삭제</th>";
+            str += "<thead>";
 
-        str += "</tr>";
-        str += "</thead>";
+            str += "<tr>";
+            str += "<th width='15%'>DATE</th>" +
+                "<th width='15%'>PRICE</th>" +
+                "<th width='25%%'>LOCATION</th>" +
+                "<th width='35%'>HISTORY</th>" +
+                "<th width='5%'>수정</th>" +
+                "<th width='5%'>삭제</th>";
 
-        str += "<tbody>";
-        str += "<tr>";
-        str += "<td style='display:none'>" + id + "<input type='text' style='display:none' id='updateId' value='" + id + "'>" + "</td>";
-        str += "<td><input class='form-control mr-sm-2' type='date' id='updateDate' value='" + date + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='number' id='updatePrice' value='" + price + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='updateLocation' value='" + location + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='updateHistory' value='" + history + "'></td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-expenditureUpdate' class='btn btn-primary'>UPDATE</button>";
-        str += "</td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-expenditureDelete' class='btn btn-warning'>DELETE</button>";
-        str += "</td>";
-        str += "</tr>";
-        str += "</tbody>";
-        str += "</table>";
+            str += "</tr>";
+            str += "</thead>";
 
-        $('#updateForm').html(str);
+            str += "<tbody>";
+            str += "<tr>";
+            str += "<td style='display:none'>" + id + "<input type='text' style='display:none' id='updateId' value='" + id + "'>" + "</td>";
+            str += "<td><input class='form-control mr-sm-2' type='date' id='updateDate' value='" + date + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='number' id='updatePrice' value='" + price + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='updateLocation' value='" + location + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='updateHistory' value='" + history + "'></td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-expenditureUpdate' class='btn btn-primary'>UPDATE</button>";
+            str += "</td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-expenditureDelete' class='btn btn-warning'>DELETE</button>";
+            str += "</td>";
+            str += "</tr>";
+            str += "</tbody>";
+            str += "</table>";
+
+            $('#updateForm').html(str);
+        }
     },
 
     expenditureUpdate: function () {
@@ -131,11 +133,11 @@ var expenditure = {
                         $("#loading").show();
                     }
                     else {
-                        $('body').append('<div id="loading" style="position:absolute; top:' + 
-                        top + 'px; left:' + 
-                        left + 'px; width:' + 
-                        width + 'px; height:' + 
-                        height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
+                        $('body').append('<div id="loading" style="position:absolute; top:' +
+                            top + 'px; left:' +
+                            left + 'px; width:' +
+                            width + 'px; height:' +
+                            height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
                     }
 
                 }

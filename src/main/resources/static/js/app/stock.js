@@ -59,11 +59,11 @@ var stock = {
                     $("#loading").show();
                 }
                 else {
-                    $('body').append('<div id="loading" style="position:absolute; top:' + 
-                    top + 'px; left:' + 
-                    left + 'px; width:' + 
-                    width + 'px; height:' + 
-                    height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
+                    $('body').append('<div id="loading" style="position:absolute; top:' +
+                        top + 'px; left:' +
+                        left + 'px; width:' +
+                        width + 'px; height:' +
+                        height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="/images/loading.gif" style="width:50px; height:50px;"></div>');
                 }
 
             }
@@ -178,46 +178,48 @@ var stock = {
         var amount = td.eq(4).text();
         var productId = td.eq(5).text();
 
-        alert("[" + productName + "]" + " 제품의 데이터를 수정합니다.");
+        if (clientName !== "CLIENT") {
+            alert("[" + productName + "]" + " 제품의 데이터를 수정합니다.");
 
-        var str = "<table class='table table-hover table-dark'>";
+            var str = "<table class='table table-hover table-dark'>";
 
-        str += "<caption>재고 수정 데이터 입력</caption>"
+            str += "<caption>재고 수정 데이터 입력</caption>"
 
-        str += "<thead>";
+            str += "<thead>";
 
-        str += "<tr>";
-        str +=
-            "<th width='20%'>CLIENT NAME</th>" +
-            "<th width='*'>PRODUCT NAME</th>" +
-            "<th width='10%'>COLOR</th>" +
-            "<th width='10%'>SIZE</th>" +
-            "<th width='10%'>AMOUNT</th>" +
-            "<th width='5%'>SAVE</th>" +
-            "<th width='5%'>DELETE</th>";
+            str += "<tr>";
+            str +=
+                "<th width='20%'>CLIENT NAME</th>" +
+                "<th width='*'>PRODUCT NAME</th>" +
+                "<th width='10%'>COLOR</th>" +
+                "<th width='10%'>SIZE</th>" +
+                "<th width='10%'>AMOUNT</th>" +
+                "<th width='5%'>SAVE</th>" +
+                "<th width='5%'>DELETE</th>";
 
-        str += "</tr>";
-        str += "</thead>";
+            str += "</tr>";
+            str += "</thead>";
 
-        str += "<tbody>";
-        str += "<tr>";
-        str += "<td style='display:none'><input type='text' style='display:none' id='productId' value='" + productId + "'></td>";
-        str += "<td>" + clientName + "</td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='name' value='" + productName + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='color' value='" + color + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='size' value='" + size + "'></td>";
-        str += "<td><input class='form-control mr-sm-2' type='text' id='amount' value='" + amount + "'></td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-stockUpdate' class='btn btn-primary'>UPDATE</button>";
-        str += "</td>";
-        str += "<td>";
-        str += "<button type='submit' id='btn-stockDelete' class='btn btn-warning'>DELETE</button>";
-        str += "</td>";
-        str += "</tr>";
-        str += "</tbody>";
-        str += "</table>";
+            str += "<tbody>";
+            str += "<tr>";
+            str += "<td style='display:none'><input type='text' style='display:none' id='productId' value='" + productId + "'></td>";
+            str += "<td>" + clientName + "</td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='name' value='" + productName + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='color' value='" + color + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='size' value='" + size + "'></td>";
+            str += "<td><input class='form-control mr-sm-2' type='text' id='amount' value='" + amount + "'></td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-stockUpdate' class='btn btn-primary'>UPDATE</button>";
+            str += "</td>";
+            str += "<td>";
+            str += "<button type='submit' id='btn-stockDelete' class='btn btn-warning'>DELETE</button>";
+            str += "</td>";
+            str += "</tr>";
+            str += "</tbody>";
+            str += "</table>";
 
-        $('#stockUpdate').html(str);
+            $('#stockUpdate').html(str);
+        }
     }
 };
 
