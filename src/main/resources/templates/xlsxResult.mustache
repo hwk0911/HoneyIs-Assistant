@@ -2,6 +2,12 @@
 
 <div class="container">
     <!-- 분석 결과 출력 -->
+
+    <div align="left">
+        <h5>빨간색: 재고 부족</h5>
+        <h5>초록색: 재고의 50% 초과, 100% 미만 주문</h5>
+    </div>
+
     {{#orderAnalyze}}
         <table class="table table-hover table-dark">
             <thead>
@@ -9,16 +15,18 @@
                 <th width="*">{{key}}</th>
                 <th width="15%">COLOR</th>
                 <th width="15%">SIZE</th>
-                <th width="10%">AMOUNT</th>
+                <th width="10%">ORDER</th>
+                <th width="10%">STOCK</th>
             </tr>
             </thead>
             <tbody>
             {{#value}}
-                <tr>
+                <tr bgcolor="{{scarce}}">
                     <td>{{productName}}</td>
                     <td>{{color}}</td>
                     <td>{{size}}</td>
-                    <td>{{amount}}</td>
+                    <td>{{orderAmount}}</td>
+                    <td>{{stockAmount}}</td>
                     <td style="display:none">{{id}}</td>
                 </tr>
             {{/value}}
