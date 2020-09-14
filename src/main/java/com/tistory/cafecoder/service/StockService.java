@@ -41,7 +41,7 @@ public class StockService {
         }
 
         for (String color : colorArr) {
-            if (this.productRepository.findByNameAndColorIdAndEmail(newestDto.getName(), this.colorRepository.findByColor(newestDto.getColor()).getId(), email) != null) {
+            if (this.productRepository.findByNameAndColorIdAndEmail(newestDto.getName(), this.colorRepository.findByColor(color).getId(), email) != null) {
                 continue;
             }
 
