@@ -1,0 +1,123 @@
+{{>layout/header}}
+
+<div class="container">
+
+    <h5>데이터를 클릭하여 수정을 진행하실수 있습니다.</h5>
+    </br>
+    </br>
+
+    <div align="left">
+        <h5>검색어를 포함하는 발주처 검색 결과</h5>
+        </br>
+    </div>
+
+    <!-- 신규 재고 입력 동적 생성 폼 -->
+
+    <div id="stockUpdate"></div>
+    <div id="updateForm"></div>
+
+    <!-- 사용자에 등록된 클라이언트 검색 결과-->
+    <table class="table table-hover table-dark" id="clientTable">
+        <caption>저장 된 클라이언트 목록</caption>
+        <thead>
+        <tr>
+            <th width="5%">ID</th>
+            <th width="25%">CLIENT NAME</th>
+            <th width="25%">LOCATION</th>
+            <th width="*">PH_NUMBER</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#clientList}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{location}}</td>
+                <td>{{number}}</td>
+            </tr>
+        {{/clientList}}
+        </tbody>
+    </table>
+
+    <div class="dropdown-divider"></div>
+
+    <!-- 사용자에 등록된 클라이언트별 상품 검색 결과-->
+    <div align="left">
+        <h5>검색어를 포함하는 발주처의 상품 검색 결과</h5>
+        </br>
+    </div>
+    {{#clientResult}}
+        <table class="table table-hover table-dark" id="stockListTable">
+            <thead>
+            <tr>
+                <th width="*">{{key}}</th>
+                <th width="15%">COLOR</th>
+                <th width="15%">SIZE</th>
+                <th width="10%">AMOUNT</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{#value}}
+                <tr>
+                    <td style="display:none">{{key}}</td>
+                    <td>{{productName}}</td>
+                    <td>{{color}}</td>
+                    <td>{{size}}</td>
+                    <td>{{amount}}</td>
+                    <td style="display:none">{{id}}</td>
+                </tr>
+            {{/value}}
+            </tbody>
+        </table>
+    {{/clientResult}}
+
+    <!-- 재고 없음 -->
+    {{^clientResult}}
+        </br>
+        <h4>검색어를 포함하는 발주처가 없습니다.</h4>
+    {{/clientResult}}
+
+    <div class="dropdown-divider"></div>
+
+    <!-- 사용자에 등록된 상품 검색 결과 -->
+
+    <div align="left">
+        <h5>검색어를 포함하는 상품 검색 결과</h5>
+        </br>
+    </div>
+
+    {{#stockResult}}
+
+        <table class="table table-hover table-dark" id="stockListTable">
+            <thead>
+            <tr>
+                <th width="*">{{key}}</th>
+                <th width="15%">COLOR</th>
+                <th width="15%">SIZE</th>
+                <th width="10%">AMOUNT</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{#value}}
+                <tr>
+                    <td style="display:none">{{key}}</td>
+                    <td>{{productName}}</td>
+                    <td>{{color}}</td>
+                    <td>{{size}}</td>
+                    <td>{{amount}}</td>
+                    <td style="display:none">{{id}}</td>
+                </tr>
+            {{/value}}
+            </tbody>
+        </table>
+    {{/stockResult}}
+
+    <!-- 재고 없음 -->
+    {{^stockResult}}
+        </br>
+        <h4>검색어를 포함하는 상품이 없습니다.</h4>
+    {{/stockResult}}
+</div>
+{{>layout/footer}}
