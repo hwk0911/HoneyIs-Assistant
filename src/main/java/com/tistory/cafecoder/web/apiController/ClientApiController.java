@@ -1,5 +1,7 @@
 package com.tistory.cafecoder.web.apiController;
 
+import com.tistory.cafecoder.config.auth.LoginUser;
+import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.service.ClientService;
 import com.tistory.cafecoder.web.dto.ClientDto;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class ClientApiController {
     }
 
     @DeleteMapping("/api/v1/client/delete/{id}")
-    public Long delete(@PathVariable("id") Long id) {
-        return this.clientService.delete(id);
+    public Long delete(@PathVariable("id") Long id, @LoginUser SessionUser user) {
+        return this.clientService.delete(id, user.getEmail());
     }
 }
