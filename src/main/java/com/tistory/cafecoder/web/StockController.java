@@ -50,21 +50,18 @@ public class StockController {
         return "stockList";
     }
 
+    @GetMapping("/stock/search")
+    public String searchStock (@RequestParam("searchWord") String searchWord, @LoginUser SessionUser user, Model model) {
+        if(user != null) {
+            model.addAttribute("loginUser", user.getEmail());
 
-    @GetMapping("/stock/client/search")
-    public String stockClientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
-        if (user == null) {
-            return "redirect:/oauth2/authorization/google";
-        }
-        model.addAttribute("loginUser", user.getEmail());
-
-        if (searchWord.equals("")) {
-            model.addAttribute("clientList", this.clientService.searchAll(user.getEmail()));
+            model.addAttribute("clientResult", this.stockService.stockClientSearch(searchWord, user.getEmail()));
+            model.addAttribute("stockResult", this.stockService.stockSearch(searchWord, user.getEmail()));
         }
         else {
-            model.addAttribute("clientList", this.clientService.search(searchWord, user.getEmail()));
+            return "index";
         }
 
-        return "stock";
+        return "search";
     }
 }
