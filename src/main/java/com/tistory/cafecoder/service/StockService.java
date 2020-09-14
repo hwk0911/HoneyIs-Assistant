@@ -23,39 +23,40 @@ public class StockService {
         String[] colorArr = newestDto.getColor().split(",");
         String[] sizeArr = newestDto.getSize().split(",");
 
-        if (!this.productRepository.findByName(newestDto.getName()).isEmpty()) {
-            return -1L;
-        } else {
-            for (String color : colorArr) {
-                if (this.colorRepository.findByColor(color) == null) {
-                    this.colorRepository.save(new Color().builder()
-                            .color(color)
-                            .build());
-                }
+
+        for (String color : colorArr) {
+            if (this.colorRepository.findByColor(color) == null) {
+                this.colorRepository.save(new Color().builder()
+                        .color(color)
+                        .build());
+            }
+        }
+
+        for (String size : sizeArr) {
+            if (this.sizeRepository.findBySize(size) == null) {
+                this.sizeRepository.save(new Size().builder()
+                        .size(size)
+                        .build());
+            }
+        }
+
+        for (String color : colorArr) {
+            if (this.productRepository.findByNameAndColorIdAndEmail(newestDto.getName(), this.colorRepository.findByColor(newestDto.getColor()).getId(), email) != null) {
+                continue;
             }
 
             for (String size : sizeArr) {
-                if (this.sizeRepository.findBySize(size) == null) {
-                    this.sizeRepository.save(new Size().builder()
-                            .size(size)
-                            .build());
-                }
+                this.productRepository.save(new Product().builder()
+                        .clientId(newestDto.getClientId())
+                        .name(newestDto.getName())
+                        .email(email)
+                        .colorId(this.colorRepository.findByColor(color).getId())
+                        .sizeId(this.sizeRepository.findBySize(size).getId())
+                        .build());
             }
-
-            for (String color : colorArr) {
-                for (String size : sizeArr) {
-                    this.productRepository.save(new Product().builder()
-                            .clientId(newestDto.getClientId())
-                            .name(newestDto.getName())
-                            .email(email)
-                            .colorId(this.colorRepository.findByColor(color).getId())
-                            .sizeId(this.sizeRepository.findBySize(size).getId())
-                            .build());
-                }
-            }
-
-            return 1L;
         }
+
+        return 1L;
     }
 
     @Transactional(readOnly = true)
@@ -133,10 +134,9 @@ public class StockService {
 
     @Transactional(readOnly = true)
     public HashSet<String> undefinedStock(String email) {
-        if(this.clientRepository.findByName(email) == null) {
+        if (this.clientRepository.findByName(email) == null) {
             return null;
-        }
-        else {
+        } else {
             List<Product> undefinedStockList = this.productRepository.findByClientId(this.clientRepository.findByName(email).getId());
             return this.setProductDto(undefinedStockList);
         }
@@ -153,7 +153,7 @@ public class StockService {
     }
 
     @Transactional
-    public Long clientAllModify (UndefinedStockDto undefinedStockDto, String email) {
+    public Long clientAllModify(UndefinedStockDto undefinedStockDto, String email) {
         Long clientId = this.clientRepository.findByName(email).getId();
         Long newClientId = this.clientRepository.findByName(undefinedStockDto.getClientName()).getId();
 
@@ -165,7 +165,7 @@ public class StockService {
 
         System.out.println(undefinedStockDto.getProductName());
 
-        for(Product product : productList) {
+        for (Product product : productList) {
             product.update(
                     product.getName(),
                     product.getColorId(),
@@ -178,19 +178,18 @@ public class StockService {
         return productList.get(0).getId();
     }
 
-    public Set<Map.Entry<String, List<ProductDto>>> stockSearch (String searchWord, String email) {
+    public Set<Map.Entry<String, List<ProductDto>>> stockSearch(String searchWord, String email) {
         Map<String, List<ProductDto>> retMap = new HashMap<>();
 
         List<Product> searchResult = this.productRepository.findByNameContainsAndEmail(searchWord, email);
         List<ProductDto> tempProductDtoList;
 
-        for(Product product : searchResult) {
+        for (Product product : searchResult) {
             String clientName = this.clientRepository.findById(product.getClientId()).get().getName();
 
-            if(retMap.containsKey(clientName)) {
+            if (retMap.containsKey(clientName)) {
                 tempProductDtoList = retMap.get(clientName);
-            }
-            else {
+            } else {
                 tempProductDtoList = new ArrayList<>();
             }
 
@@ -208,16 +207,16 @@ public class StockService {
         return retMap.entrySet();
     }
 
-    public Set<Map.Entry<String, List<ProductDto>>> stockClientSearch (String searchWord, String email) {
+    public Set<Map.Entry<String, List<ProductDto>>> stockClientSearch(String searchWord, String email) {
         Map<String, List<ProductDto>> retMap = new HashMap<>();
 
         List<Client> searchResult = this.clientRepository.findByNameContainsAndEmail(searchWord, email);
         List<ProductDto> tempProductDtoList;
 
-        for(Client client : searchResult) {
+        for (Client client : searchResult) {
             tempProductDtoList = new ArrayList<>();
 
-            for(Product product : this.productRepository.findByClientId(client.getId())) {
+            for (Product product : this.productRepository.findByClientId(client.getId())) {
                 tempProductDtoList.add(new ProductDto(
                         product.getId(),
                         product.getName(),
