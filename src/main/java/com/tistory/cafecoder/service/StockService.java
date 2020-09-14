@@ -177,4 +177,59 @@ public class StockService {
 
         return productList.get(0).getId();
     }
+
+    public Set<Map.Entry<String, List<ProductDto>>> stockSearch (String searchWord, String email) {
+        Map<String, List<ProductDto>> retMap = new HashMap<>();
+
+        List<Product> searchResult = this.productRepository.findByNameContainsAndEmail(searchWord, email);
+        List<ProductDto> tempProductDtoList;
+
+        for(Product product : searchResult) {
+            String clientName = this.clientRepository.findById(product.getClientId()).get().getName();
+
+            if(retMap.containsKey(clientName)) {
+                tempProductDtoList = retMap.get(clientName);
+            }
+            else {
+                tempProductDtoList = new ArrayList<>();
+            }
+
+            tempProductDtoList.add(new ProductDto(
+                    product.getId(),
+                    product.getName(),
+                    this.colorRepository.findById(product.getColorId()).get().getColor(),
+                    this.sizeRepository.findById(product.getSizeId()).get().getSize(),
+                    product.getAmount()
+            ));
+
+            retMap.put(clientName, tempProductDtoList);
+        }
+
+        return retMap.entrySet();
+    }
+
+    public Set<Map.Entry<String, List<ProductDto>>> stockClientSearch (String searchWord, String email) {
+        Map<String, List<ProductDto>> retMap = new HashMap<>();
+
+        List<Client> searchResult = this.clientRepository.findByNameContainsAndEmail(searchWord, email);
+        List<ProductDto> tempProductDtoList;
+
+        for(Client client : searchResult) {
+            tempProductDtoList = new ArrayList<>();
+
+            for(Product product : this.productRepository.findByClientId(client.getId())) {
+                tempProductDtoList.add(new ProductDto(
+                        product.getId(),
+                        product.getName(),
+                        this.colorRepository.findById(product.getColorId()).get().getColor(),
+                        this.sizeRepository.findById(product.getSizeId()).get().getSize(),
+                        product.getAmount()
+                ));
+            }
+
+            retMap.put(client.getName(), tempProductDtoList);
+        }
+
+        return retMap.entrySet();
+    }
 }
