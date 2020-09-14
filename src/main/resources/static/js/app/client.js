@@ -153,7 +153,7 @@ var client = {
             number: $('#updateNumber').val()
         };
 
-        if (confirm("선택된 데이터: \n" + data.name + "\n" + data.location + "\n" + data.number + "\n데이터 삭제 후 복구가 불가능합니다. 삭제하시겠습니까?")) {
+        if (confirm("선택된 데이터: \n" + data.name + "\n" + data.location + "\n" + data.number + "\n" + "경고: 해당 발주처에 등록된 모든 상품은 발주처 미등록 상품으로 전환됩니다." + "\n" + "발주처 삭제 후 복구가 불가능합니다. \n삭제하시겠습니까?")) {
             $.ajax({
                 type: 'DELETE',
                 url: '/api/v1/client/delete/' + data.id,
