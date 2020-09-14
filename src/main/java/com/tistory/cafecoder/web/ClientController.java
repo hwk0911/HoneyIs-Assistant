@@ -26,7 +26,7 @@ public class ClientController {
     }
 
     @GetMapping("/client/search")
-    public String clientSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+    public String clientSearch(@RequestParam("searchWord") String searchWord, @LoginUser SessionUser user, Model model) {
         if (user == null) {
             return "redirect:/oauth2/authorization/google";
         }
@@ -53,7 +53,7 @@ public class ClientController {
     }
 
     @GetMapping("/client/radio/search")
-    public String clientRadioSearch(@RequestParam("searchword") String searchWord, @LoginUser SessionUser user, Model model) {
+    public String clientRadioSearch(@RequestParam("searchWord") String searchWord, @LoginUser SessionUser user, Model model) {
         model.addAttribute("loginUser", user.getEmail());
 
         if (searchWord.equals("")) {
