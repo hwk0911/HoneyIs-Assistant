@@ -2,6 +2,8 @@ package com.tistory.cafecoder.service;
 
 import com.tistory.cafecoder.domain.product.Client;
 import com.tistory.cafecoder.domain.product.ClientRepository;
+import com.tistory.cafecoder.domain.product.Product;
+import com.tistory.cafecoder.domain.product.ProductRepository;
 import com.tistory.cafecoder.web.dto.ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.util.List;
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final ProductRepository productRepository;
 
     @Transactional
     public Long create(ClientDto clientDto) {
@@ -43,8 +46,18 @@ public class ClientService {
     }
 
     @Transactional
-    public Long delete(Long id) {
+    public Long delete(Long id, String email) {
         Client client = findById(id);
+
+        for(Product product : this.productRepository.findByClientId(id)) {
+            product.update(
+                    product.getName(),
+                    product.getColorId(),
+                    product.getSizeId(),
+                    product.getAmount(),
+                    this.clientRepository.findByName(email).getId()
+            );
+        }
 
         this.clientRepository.delete(client);
 
