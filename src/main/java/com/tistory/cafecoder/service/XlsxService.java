@@ -21,6 +21,7 @@ public class XlsxService {
     private final ColorRepository colorRepository;
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
+    private final ProductLinkRepository productLinkRepository;
 
     @Transactional(readOnly = true)
     public Map<Long, AmountDto> getResult(List<MultipartFile> multipartFiles, String email) {
@@ -33,6 +34,7 @@ public class XlsxService {
 
         for (XlsxDto orderProduct : analyzeList) {
             Long colorId;
+            String productName = orderProduct.getProductName();
 
             if (this.colorRepository.findByColor(orderProduct.getColor()) == null) {
                 colorId = this.colorRepository.save(new Color().builder().color(orderProduct.getColor()).build()).getId();
@@ -41,7 +43,6 @@ public class XlsxService {
             }
 
             Long productId;
-            Long orderAmount;
             Long stockAmount = 0L;
 
             if (this.sizeRepository.findBySize("FREE") == null) {
@@ -57,12 +58,16 @@ public class XlsxService {
                         .build()).getId();
             }
 
-            if (this.productRepository.findByNameAndColorIdAndEmail(orderProduct.getProductName(), colorId, email) == null) {
-                if (!this.productRepository.findByNameAndEmail(orderProduct.getProductName(), email).isEmpty()) {
-                    Product sameProduct = this.productRepository.findByNameAndEmail(orderProduct.getProductName(), email).get(0);
+            if(!this.productLinkRepository.findByProductNameAndEmail(orderProduct.getProductName(), email).isEmpty()) {
+                productName = this.productLinkRepository.findByProductNameAndEmail(orderProduct.getProductName(), email).get(0).getTargetName();
+            }
+
+            if (this.productRepository.findByNameAndColorIdAndEmail(productName, colorId, email) == null) {
+                if (!this.productRepository.findByNameAndEmail(productName, email).isEmpty()) {
+                    Product sameProduct = this.productRepository.findByNameAndEmail(productName, email).get(0);
 
                     productId = this.productRepository.save(new Product().builder()
-                            .name(orderProduct.getProductName())
+                            .name(productName)
                             .email(email)
                             .colorId(colorId)
                             .sizeId(this.sizeRepository.findBySize("FREE").getId())
@@ -71,7 +76,7 @@ public class XlsxService {
                             .getId();
                 } else {
                     productId = this.productRepository.save(new Product().builder()
-                            .name(orderProduct.getProductName())
+                            .name(productName)
                             .email(email)
                             .colorId(colorId)
                             .sizeId(this.sizeRepository.findBySize("FREE").getId())
@@ -80,7 +85,7 @@ public class XlsxService {
                             .getId();
                 }
             } else {
-                Product stock = this.productRepository.findByNameAndColorIdAndEmail(orderProduct.getProductName(), colorId, email);
+                Product stock = this.productRepository.findByNameAndColorIdAndEmail(productName, colorId, email);
 
                 productId = stock.getId();
                 stockAmount = stock.getAmount();
