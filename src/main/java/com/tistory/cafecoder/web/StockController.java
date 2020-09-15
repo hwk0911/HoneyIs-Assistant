@@ -64,4 +64,28 @@ public class StockController {
 
         return "search";
     }
+
+    @GetMapping("/stock/radio")
+    public String searchClientPopup (Model model, @LoginUser SessionUser user) {
+        if (user != null) {
+            model.addAttribute("loginUser", user.getEmail());
+            model.addAttribute("productMap", this.stockService.removeUndefineStock(this.stockService.stockList(user.getEmail()), user.getEmail()));
+        }
+
+        return "stockRadio";
+    }
+
+    @GetMapping("/stock/radio/search")
+    public String clientRadioSearch(@RequestParam("searchWord") String searchWord, @LoginUser SessionUser user, Model model) {
+        model.addAttribute("loginUser", user.getEmail());
+
+        if (searchWord.equals("")) {
+            model.addAttribute("productMap", this.stockService.removeUndefineStock(this.stockService.stockList(user.getEmail()), user.getEmail()));
+        }
+        else {
+            model.addAttribute("productMap", this.stockService.removeUndefineStock(this.stockService.stockSearch(searchWord, user.getEmail()), user.getEmail()));
+        }
+
+        return "stockRadio";
+    }
 }
