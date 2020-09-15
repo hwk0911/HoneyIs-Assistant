@@ -1,0 +1,51 @@
+{{>layout/nonNavHeader}}
+
+<div class="container">
+    <!-- 클라이언트 검색 폼 -->
+
+    <form class="form-inline md-form mr-auto mb-4" style="float:right;" method="get" action="/stock/radio/search">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="searchWord">
+        <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" id="btn-stockSearch">
+            <img src="https://img.icons8.com/ios-glyphs/30/000000/search.png"/>
+        </button>
+    </form>
+
+    <!-- 사용자에 저장 된 클라이언트 목록 -->
+
+    {{#productMap}}
+        <table class="table table-hover table-dark">
+            <thead>
+            <tr>
+                <th width="5%"></th>
+                <th width="*">{{key}}</th>
+                <th width="15%">COLOR</th>
+                <th width="15%">SIZE</th>
+                <th width="10%">AMOUNT</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{#value}}
+                <tr>
+                    <td><input type="radio" name="stockName" value="{{productName}}"></td>
+                    <td>{{productName}}</td>
+                    <td>{{color}}</td>
+                    <td>{{size}}</td>
+                    <td>{{amount}}</td>
+                    <td style="display:none">{{id}}</td>
+                </tr>
+            {{/value}}
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary" type="button" id="btn-linkSubmit">선택 완료</button>
+    {{/productMap}}
+
+    <!-- 재고 없음 -->
+    {{^productMap}}
+        </br>
+        <h1>등록된 상품이 없습니다.</h1>
+    {{/productMap}}
+
+</div>
+{{>layout/footer}}
