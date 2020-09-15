@@ -3,6 +3,7 @@ package com.tistory.cafecoder.service;
 import com.tistory.cafecoder.domain.product.*;
 import com.tistory.cafecoder.web.dto.NewestDto;
 import com.tistory.cafecoder.web.dto.ProductDto;
+import com.tistory.cafecoder.web.dto.ProductLinkDto;
 import com.tistory.cafecoder.web.dto.UndefinedStockDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class StockService {
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
     private final ClientRepository clientRepository;
+    private final ProductLinkRepository productLinkRepository;
 
     @Transactional
     public Long newestSave(NewestDto newestDto, String email) {
@@ -114,8 +116,8 @@ public class StockService {
 
         product.update(
                 updateDto.getProductName(),
-                this.colorRepository.findByColor(updateDto.getColor()).getId(),
-                this.sizeRepository.findBySize(updateDto.getSize()).getId(),
+                colorId,
+                sizeId,
                 updateDto.getAmount(),
                 product.getClientId()
         );
@@ -130,6 +132,19 @@ public class StockService {
         this.productRepository.delete(product);
 
         return 1L;
+    }
+
+    @Transactional
+    public Long stockDelete(String productName) {
+        List<Product> productList = this.productRepository.findByName(productName);
+
+        Long size = (long)productList.size();
+
+        for(Product product : productList) {
+            this.productRepository.delete(product);
+        }
+
+        return size;
     }
 
     @Transactional(readOnly = true)
@@ -178,6 +193,7 @@ public class StockService {
         return productList.get(0).getId();
     }
 
+    @Transactional(readOnly = true)
     public Set<Map.Entry<String, List<ProductDto>>> stockSearch(String searchWord, String email) {
         Map<String, List<ProductDto>> retMap = new HashMap<>();
 
@@ -207,6 +223,7 @@ public class StockService {
         return retMap.entrySet();
     }
 
+    @Transactional(readOnly = true)
     public Set<Map.Entry<String, List<ProductDto>>> stockClientSearch(String searchWord, String email) {
         Map<String, List<ProductDto>> retMap = new HashMap<>();
 
@@ -230,5 +247,47 @@ public class StockService {
         }
 
         return retMap.entrySet();
+    }
+
+    public Set<Map.Entry<String, List<ProductDto>>> removeUndefineStock(Set<Map.Entry<String, List<ProductDto>>> entrySet, String email) {
+        Iterator<Map.Entry<String, List<ProductDto>>> mapItr = entrySet.iterator();
+
+        while (mapItr.hasNext()) {
+            Map.Entry<String, List<ProductDto>> temp = mapItr.next();
+
+            if (temp.getKey().equals(email)) {
+                entrySet.remove(temp);
+                break;
+            }
+        }
+
+        return entrySet;
+    }
+
+    public HashSet<String> removeLinked(HashSet<String> hashSet, String email) {
+        Iterator<String> keyIterator = hashSet.iterator();
+
+        while (keyIterator.hasNext()) {
+            String key = keyIterator.next();
+
+            if (this.productLinkRepository.findByProductNameAndEmail(key, email).isEmpty()) continue;
+
+            hashSet.remove(key);
+        }
+
+        return hashSet;
+    }
+
+    @Transactional
+    public Long linkSave(ProductLinkDto productLinkDto, String email) {
+        Long id = this.productLinkRepository.save(new ProductLink().builder()
+                .productName(productLinkDto.getProductName())
+                .targetName(productLinkDto.getTargetName())
+                .email(email)
+                .build()).getId();
+
+        this.stockDelete(productLinkDto.getProductName());
+
+        return id;
     }
 }
