@@ -1,10 +1,7 @@
 package com.tistory.cafecoder.service;
 
 import com.tistory.cafecoder.domain.product.*;
-import com.tistory.cafecoder.web.dto.NewestDto;
-import com.tistory.cafecoder.web.dto.ProductDto;
-import com.tistory.cafecoder.web.dto.ProductLinkDto;
-import com.tistory.cafecoder.web.dto.UndefinedStockDto;
+import com.tistory.cafecoder.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -289,5 +286,58 @@ public class StockService {
         this.stockDelete(productLinkDto.getProductName());
 
         return id;
+    }
+
+    @Transactional
+    public Long deduction (Map<String, Object> deductionDtoMap) {
+        Long size = (long)deductionDtoMap.size();
+
+        Iterator<String> mapItr = deductionDtoMap.keySet().iterator();
+
+        while (mapItr.hasNext()) {
+            String key = mapItr.next();
+            Long value = this.objectToLong(deductionDtoMap.get(key));
+
+            Product product = this.productRepository.findById(Long.parseLong(key)).get();
+
+            product.update(
+                    product.getName(),
+                    product.getColorId(),
+                    product.getSizeId(),
+                    product.getAmount() - value,
+                    product.getClientId()
+            );
+        }
+
+        return size;
+    }
+
+    public Long objectToLong (Object object) {
+        StringBuilder stringBuilder = new StringBuilder(String.valueOf(object));
+
+        stringBuilder.deleteCharAt(0);
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+
+        return Long.parseLong(stringBuilder.toString());
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, List<OrderDto>> getDeductionResult (Map<String, List<OrderDto>> orderMap) {
+        Iterator<String> orderMapItr = orderMap.keySet().iterator();
+
+        while (orderMapItr.hasNext()) {
+            String key = orderMapItr.next();
+
+            List<OrderDto> orderList = orderMap.get(key);
+
+            for(int index = 0, size = orderList.size() ; index < size ; ++index) {
+                OrderDto orderDto = orderList.get(index);
+                orderList.set(index, orderDto.setStockAmount(this.productRepository.findById(orderDto.getId()).get().getAmount()));
+            }
+
+            orderMap.put(key, orderList);
+        }
+
+        return orderMap;
     }
 }
