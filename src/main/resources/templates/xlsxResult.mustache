@@ -8,43 +8,53 @@
         <h5>초록색: 재고의 50% 초과, 100% 미만 주문</h5>
     </div>
 
-    {{#orderAnalyze}}
-        <table class="table table-hover table-dark">
-            <thead>
-            <tr>
-                <th width="*">{{key}}</th>
-                <th width="15%">COLOR</th>
-                <th width="15%">SIZE</th>
-                <th width="10%">ORDER</th>
-                <th width="10%">STOCK</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#value}}
-                <tr bgcolor="{{scarce}}">
-                    <td>{{productName}}</td>
-                    <td>{{color}}</td>
-                    <td>{{size}}</td>
-                    <td>{{orderAmount}}</td>
-                    <td>{{stockAmount}}</td>
-                    <td style="display:none">{{id}}</td>
+    <div id="printArea">
+        {{#orderAnalyze}}
+            <table class="table table-hover table-dark">
+                <thead>
+                <tr>
+                    <th width="*">{{key}}</th>
+                    <th width="15%">COLOR</th>
+                    <th width="15%">SIZE</th>
+                    <th width="10%">ORDER</th>
+                    <th width="10%">STOCK</th>
                 </tr>
-            {{/value}}
-            </tbody>
-        </table>
-    {{/orderAnalyze}}
-    {{^orderAnalyze}}
-        <table class="table table-hover table-dark">
-            <caption>발주 목록이 없습니다.</caption>
-            <thead>
-            <tr>
-                <th width="*">PRODUCT NAME</th>
-                <th width="15%">COLOR</th>
-                <th width="15%">SIZE</th>
-                <th width="10%">AMOUNT</th>
-            </tr>
-            </thead>
-        </table>
-    {{/orderAnalyze}}
+                </thead>
+                <tbody>
+                {{#value}}
+                    <tr bgcolor="{{scarce}}" name="resultTable">
+                        <td>{{productName}}</td>
+                        <td>{{color}}</td>
+                        <td>{{size}}</td>
+                        <td>{{orderAmount}}</td>
+                        <td>{{stockAmount}}</td>
+                        <td style="display:none">{{id}}</td>
+                    </tr>
+                {{/value}}
+                </tbody>
+            </table>
+        {{/orderAnalyze}}
+        {{^orderAnalyze}}
+            <table class="table table-hover table-dark">
+                <caption>발주 목록이 없습니다.</caption>
+                <thead>
+                <tr>
+                    <th width="*">PRODUCT NAME</th>
+                    <th width="15%">COLOR</th>
+                    <th width="15%">SIZE</th>
+                    <th width="10%">AMOUNT</th>
+                </tr>
+                </thead>
+            </table>
+        {{/orderAnalyze}}
+    </div>
+    <div align="right">
+        {{#deducted}}
+            <button type="button" id="btn-print" class="btn btn-primary">인쇄 시작</button>
+        {{/deducted}}
+        {{^deducted}}
+            <button type="button" id="btn-deduction" class="btn btn-primary">공제 시작</button>
+        {{/deducted}}
+    </div>
 </div>
 {{>layout/footer}}
