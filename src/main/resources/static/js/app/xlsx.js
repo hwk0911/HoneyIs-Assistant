@@ -22,6 +22,12 @@ var xlsx = {
         $(document).on('click', '#orderTable tr', function () {
             _this.updateClient($(this));
         });
+        $(document).on('click', '#btn-deduction', function () {
+            _this.deduction();
+        });
+        $(document).on('click', '#btn-print', function () {
+            _this.print();
+        });
     },
 
     dragOver: function (e) {
@@ -57,7 +63,7 @@ var xlsx = {
         if (files[0].name.includes(".xlsx") || files[0].name.includes(".xls")) {
             $.ajax({
                 type: "POST",
-                url: "/api/v1/xlsx/analyze/" + method,
+                url: "/api/v1/xlsx/analyze",
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -90,7 +96,7 @@ var xlsx = {
 
                 }
             }).done(function (e) {
-                window.location.href = "/xlsx/result/" + method;
+                window.location.href = "/xlsx/result";
             }).fail(function () {
                 alert("파일 형식 에러: \n엑셀 내 상품명, 옵션 정보, 수량 분류가 존재하는지 확인해주세요.");
             });
@@ -98,7 +104,59 @@ var xlsx = {
         else {
             alert("xlsx 또는 xls 파일이 아닙니다.");
         }
-    }    
+    },
+
+    deduction: function (tr) {
+        var tr = $('tr[name=resultTable]');
+        var data = {};
+
+        for (var index = 0, size = tr.length; index < size; ++index) {
+            var td = tr.eq(index).children();
+
+            if (td.eq(1) === "COLOR") continue;
+
+            data[td.eq(5).text()] = [td.eq(3).text()]
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/stock/deduction',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function () {
+            alert('재고 수량 수정이 완료되었습니다.');
+            window.location.href = "/xlsx/result/deduction";
+        }).fail(function () {
+            alert(JSON.stringify(error));
+        });
+    },
+
+    print: function() {
+        var printBody = $('#printArea').html();
+
+        win = window.open();
+        
+        
+    
+
+    
+    
+        
+
+        win.document.write("<!DOCTYPE HTML>");
+        win.document.write("<html>");
+        win.document.write("<head>");
+        win.document.write("<title>Honey_Is Assistant</title>");
+        win.document.write("<meta http-equiv='Content-Type' content='text/html' charset='UTF-8'/>");
+        win.document.write("<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>");
+        win.document.write("<link rel='stylesheet' href='/css/main.css'></link>");
+        win.document.write("</head>");
+        win.document.write(printBody);
+
+        win.print();
+        win.close();
+    }
 };
 
 xlsx.init();
