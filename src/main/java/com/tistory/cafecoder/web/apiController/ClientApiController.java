@@ -14,10 +14,10 @@ public class ClientApiController {
     private final ClientService clientService;
 
     @PostMapping("/api/v1/client/save")
-    public Long save(@RequestBody ClientDto clientDto) {
+    public Long save(@RequestBody ClientDto clientDto, @LoginUser SessionUser user) {
         System.out.println(clientDto.getEmail() + " " + clientDto.getName() + " " + clientDto.getLocation() + " " + clientDto.getNumber());
 
-        return this.clientService.create(clientDto);
+        return this.clientService.create(clientDto, user.getEmail());
     }
 
     @PutMapping("/api/v1//client/update")

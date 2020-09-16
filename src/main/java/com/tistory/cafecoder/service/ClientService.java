@@ -18,9 +18,10 @@ public class ClientService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public Long create(ClientDto clientDto) {
-        Client client = clientDto.toEntity();
+    public Long create(ClientDto clientDto, String email) {
+        if(this.clientRepository.findByNameAndEmail(clientDto.getName(), email) != null) return 0L;
 
+        Client client = clientDto.toEntity();
         return this.clientRepository.save(client).getId();
     }
 
