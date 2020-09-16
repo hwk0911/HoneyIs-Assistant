@@ -22,8 +22,8 @@ import java.util.Map;
 public class XlsxApiController {
     private final XlsxService xlsxService;
 
-    @PostMapping("/api/v1/xlsx/analyze/{method}")
-    public Long setOrder(@RequestParam(value = "files") List<MultipartFile> multipartFiles, @PathVariable("method") String method, @LoginUser SessionUser user, HttpServletRequest request) {
+    @PostMapping("/api/v1/xlsx/analyze")
+    public Long setOrder(@RequestParam(value = "files") List<MultipartFile> multipartFiles, @LoginUser SessionUser user, HttpServletRequest request) {
         Map<Long, AmountDto> productMap = this.xlsxService.getResult(multipartFiles, user.getEmail());
         Map<String, List<OrderDto>> groupResult = this.xlsxService.groupByClient(productMap, user.getEmail());
 
