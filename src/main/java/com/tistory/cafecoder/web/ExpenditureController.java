@@ -2,6 +2,7 @@ package com.tistory.cafecoder.web;
 
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
+import com.tistory.cafecoder.config.money.MoneyTrans;
 import com.tistory.cafecoder.domain.expenditure.Expenditure;
 import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.ExpenditureService;
@@ -58,7 +59,7 @@ public class ExpenditureController {
 
         List<Expenditure> expenditureList = this.expenditureService.getMonthList(email, startDate, endDate);
         model.addAttribute("expenditureList", expenditureList);
-        model.addAttribute("total", this.expenditureService.getSum(expenditureList));
+        model.addAttribute("total", new MoneyTrans(this.expenditureService.getSum(expenditureList)).getMoney());
 
         return "expenditureList";
     }

@@ -50,8 +50,8 @@ public class ExpenditureService {
         return expenditure;
     }
 
-    public int getSum (List<Expenditure> expenditureList) {
-        int sum = 0;
+    public Long getSum (List<Expenditure> expenditureList) {
+        Long sum = 0L;
 
         for(Expenditure expenditure : expenditureList) {
             sum += expenditure.getPrice();
