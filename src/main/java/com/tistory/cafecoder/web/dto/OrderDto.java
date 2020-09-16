@@ -38,4 +38,10 @@ public class OrderDto implements Serializable {
             this.scarce = "";
         }
     }
+
+    public OrderDto setStockAmount (Long stockAmount) {
+        this.stockAmount = stockAmount;
+
+        return this;
+    }
 }
