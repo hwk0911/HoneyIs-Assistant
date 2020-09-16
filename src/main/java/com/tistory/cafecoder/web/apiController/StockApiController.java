@@ -3,12 +3,11 @@ package com.tistory.cafecoder.web.apiController;
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
 import com.tistory.cafecoder.service.StockService;
-import com.tistory.cafecoder.web.dto.NewestDto;
-import com.tistory.cafecoder.web.dto.ProductDto;
-import com.tistory.cafecoder.web.dto.ProductLinkDto;
-import com.tistory.cafecoder.web.dto.UndefinedStockDto;
+import com.tistory.cafecoder.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,5 +43,10 @@ public class StockApiController {
     @DeleteMapping("/api/v1/stock/undefined/delete/{productName}")
     public Long undefinedDelete (@PathVariable("productName") String productName) {
         return this.stockService.stockDelete(productName);
+    }
+
+    @PutMapping("/api/v1/stock/deduction")
+    public Long stockDeduction (@RequestBody Map<String, Object> deductionMap) {
+        return this.stockService.deduction(deductionMap);
     }
 }
