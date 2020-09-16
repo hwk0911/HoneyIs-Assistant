@@ -2,6 +2,7 @@ package com.tistory.cafecoder.web;
 
 import com.tistory.cafecoder.config.auth.LoginUser;
 import com.tistory.cafecoder.config.auth.dto.SessionUser;
+import com.tistory.cafecoder.config.money.MoneyTrans;
 import com.tistory.cafecoder.domain.income.Income;
 import com.tistory.cafecoder.service.IncomeService;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,7 @@ public class IncomeController {
 
         List<Income> incomeList = this.incomeService.getMonthList(email, startDate, endDate);
         model.addAttribute("incomeList", incomeList);
-        model.addAttribute("total", this.incomeService.getSum(incomeList));
+        model.addAttribute("total", new MoneyTrans(this.incomeService.getSum(incomeList)).getMoney());
 
 
 

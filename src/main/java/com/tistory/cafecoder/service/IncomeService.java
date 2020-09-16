@@ -51,8 +51,8 @@ public class IncomeService {
         return income;
     }
 
-    public int getSum (List<Income> incomeList) {
-        int sum = 0;
+    public Long getSum (List<Income> incomeList) {
+        Long sum = 0L;
 
         for(Income income : incomeList) {
             sum += income.getPrice();
