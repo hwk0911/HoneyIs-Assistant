@@ -1,8 +1,8 @@
 # Honeyis_Assistant
 
 ### 프로젝트 참여  
-> Web_server: cafeCoder  
-> DataBase: dofany
+> 개발: [cafeCoder](https://cafecoder.tistory.com/)  
+> 기획: laid_3
 
 ### 배포 시작  
 2020년 09월 10일 AWS EC2를 통한 배포 시작  
