@@ -6,7 +6,7 @@
 
 ### 배포 시작  
 2020년 09월 10일 AWS EC2를 통한 배포 시작  
-http://ec2-3-34-81-185.ap-northeast-2.compute.amazonaws.com:8080/
+URL: http://ec2-3-34-81-185.ap-northeast-2.compute.amazonaws.com:8080/
 
 테스트 파일: https://drive.google.com/file/d/1mZwiY_wggke7rz3S48UqbiFOMxWisHRj/view?usp=sharing
 
