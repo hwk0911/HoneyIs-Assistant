@@ -4,6 +4,11 @@
 > Web_server: cafeCoder  
 > DataBase: dofany
 
+### 배포 시작  
+2020년 09월 10일 AWS EC2를 통한 배포 시작  
+http://ec2-3-34-81-185.ap-northeast-2.compute.amazonaws.com:8080/
+
+테스트 파일: https://drive.google.com/file/d/1mZwiY_wggke7rz3S48UqbiFOMxWisHRj/view?usp=sharing
 
 ### 애자일 소프트웨어 개발 선언  
 우리는 소프트웨어를 개발하고, 또 다른 사람의 개발을 도와주면서 소프트웨어 개발의 더 나은 방법들을 찾아가고 있다.   
