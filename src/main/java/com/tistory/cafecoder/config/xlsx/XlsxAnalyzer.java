@@ -2,15 +2,14 @@ package com.tistory.cafecoder.config.xlsx;
 
 import com.tistory.cafecoder.config.xlsx.dto.XlsxDto;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -24,7 +23,13 @@ public class XlsxAnalyzer {
 
         for (MultipartFile multipartFile : multipartFileList) {
             try {
-                workbookList.add(WorkbookFactory.create(multipartFile.getInputStream()));
+                if(multipartFile.getOriginalFilename().contains("xlsx")) {
+                    this.workbookList.add(WorkbookFactory.create(multipartFile.getInputStream()));
+                }
+                else {
+                    NPOIFSFileSystem npoifsFileSystem = new NPOIFSFileSystem(multipartFile.getInputStream());
+                    this.workbookList.add(WorkbookFactory.create(npoifsFileSystem));
+                }
             } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
             }
