@@ -31,7 +31,7 @@ public class XlsxAnalyzer {
                     this.workbookList.add(WorkbookFactory.create(npoifsFileSystem));
                 }
             } catch (IOException | InvalidFormatException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 
